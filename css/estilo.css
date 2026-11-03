@@ -165,10 +165,24 @@ strong {
 .chip-round b { position: relative; font-family: var(--f-round); font-weight: 400; font-size: 40px; letter-spacing: 6px; color: var(--creme); padding-bottom: 14px; }
 .chip-round strong { position: relative; font-family: var(--f-round); font-weight: 400; font-size: 150px; line-height: .82; color: var(--creme); background: none; }
 .chip-round.int strong { font-size: 96px; line-height: .9; }
-.titulo-round { font-family: var(--f-mao); font-weight: 700; font-size: 56px; line-height: 1.12; }
+.titulo-round { font-family: var(--f-mao); font-weight: 700; font-size: 60px; line-height: 1.1; }
+.subtitulo-round { font-family: var(--f-texto); font-style: italic; font-size: 36px; line-height: 1.3; color: var(--tx2); max-width: 520px; }
 .rabisco { width: 300px; height: 40px; overflow: visible; }
 .rabisco path { fill: none; stroke: var(--acc); stroke-width: 6; stroke-linecap: round; }
 .aviso-cartao { font-size: 32px !important; line-height: 1.45 !important; color: var(--tx) !important; background: var(--cartao); border: 2px solid var(--acc2); border-radius: 22px; padding: 26px 36px; }
+
+/* tópicos: título, subtópico e etiqueta (data, idade, lugar) */
+.col-dir.topicos { gap: 34px; }
+.topico { display: flex; gap: 30px; align-items: flex-start; }
+.topico .marca { flex: none; width: 22px; height: 22px; margin-top: 24px; border-radius: 6px; rotate: 45deg; background: var(--acc); box-shadow: 0 0 0 7px color-mix(in srgb, var(--acc) 22%, transparent); }
+.topico-txt { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-width: 0; }
+.topico .tag { font-family: var(--f-round); font-size: 30px; letter-spacing: 4px; line-height: 1; color: var(--tinta); background: var(--acc2); padding: 8px 16px 5px; border-radius: 8px; margin-bottom: 4px; }
+.claro .topico .tag { color: var(--papel); }
+.topico .t { font-family: var(--f-mao); font-weight: 700; font-size: 54px !important; line-height: 1.12 !important; color: var(--tx) !important; }
+.topico .s { font-size: 34px !important; line-height: 1.35 !important; color: var(--tx2) !important; }
+.topicos-frase { font-family: var(--f-mao) !important; font-size: 50px !important; line-height: 1.25 !important; color: var(--tx) !important; margin-top: 10px; padding-top: 30px; position: relative; }
+.topicos-frase::before { content: ""; position: absolute; left: 0; top: 0; width: 120px; height: 10px; background: var(--risco-vermelho) no-repeat center / 100% 100%; }
+.trio .intro-trio { font-family: var(--f-texto); font-size: 44px !important; line-height: 1.35; color: var(--tx2); font-weight: 400 !important; margin-bottom: 10px; }
 
 /* casa "carnaval": móveis doados, cada um de uma cor */
 .moveis { display: flex; gap: 26px; align-items: flex-end; margin-top: 12px; }
@@ -221,7 +235,7 @@ strong {
 [data-passo].esperando { visibility: hidden; }
 .item { font-size: 50px; line-height: 1.38; color: var(--tx); }
 
-.estilo-suave .item { display: flex; gap: 30px; align-items: baseline; font-size: 52px; }
+.estilo-suave .item { display: flex; gap: 30px; align-items: baseline; font-size: 60px; }
 .estilo-suave .item::before { content: ""; flex: none; width: 28px; height: 26px; translate: 0 -4px; background: var(--acc); clip-path: path("M14 26 C 4 18 0 12 0 7 C 0 3 3 0 7 0 C 10 0 12 2 14 5 C 16 2 18 0 21 0 C 25 0 28 3 28 7 C 28 12 24 18 14 26 Z"); }
 
 .estilo-cartao .item { font-size: 46px; background: var(--cartao); border-radius: 22px; padding: 30px 44px 30px 60px; position: relative; box-shadow: 0 14px 40px rgba(60,30,20,.12); }
@@ -258,7 +272,7 @@ strong {
 .estilo-aprendi .item strong { font-family: var(--f-pincel); font-weight: 400; font-size: 1.15em; color: var(--acc); background: none; }
 .estilo-aprendi .item::before { content: "✓"; font-family: var(--f-texto); font-weight: 800; color: var(--acc2); font-size: 52px; }
 
-.estilo-frio .item { font-style: italic; font-size: 52px; color: var(--tx2); transition: opacity 1s ease, filter 1s ease; }
+.estilo-frio .item { font-style: italic; font-size: 60px; color: var(--tx2); transition: opacity 1s ease, filter 1s ease; }
 .estilo-frio .item.apagando { opacity: .38; filter: blur(1.5px); }
 
 .estilo-grande .item { font-family: var(--f-mao); font-weight: 700; font-size: 86px; line-height: 1.06; }
@@ -398,9 +412,6 @@ strong {
 #dica { position: fixed; left: 50%; bottom: 18px; translate: -50% 0; z-index: 30; background: rgba(8,16,18,.85); color: #EDE6D8; font: 15px var(--f-texto); padding: 10px 18px; border-radius: 30px; transition: opacity .8s; white-space: nowrap; }
 #dica.some { opacity: 0; pointer-events: none; }
 #dica kbd { font: 700 13px var(--f-texto); background: rgba(244,236,221,.15); border-radius: 6px; padding: 2px 7px; }
-#botao-som { position: fixed; right: 14px; top: 14px; z-index: 30; font: 700 14px var(--f-texto); color: #EDE6D8; background: rgba(8,16,18,.6); border: 1px solid rgba(244,236,221,.25); border-radius: 30px; padding: 9px 16px; cursor: pointer; transition: opacity .6s; }
-#botao-som:hover, #botao-som:focus-visible { background: rgba(30,154,166,.55); outline: none; }
-body.cursor-oculto #botao-som { opacity: 0; }
 #pausa { position: absolute; inset: 0; z-index: 25; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 30px; background: rgba(5,11,13,.82); }
 #pausa.ativo { display: flex; animation: aparecer .6s ease; }
 #pausa img { width: 300px; height: 300px; border-radius: 50%; animation: respirar 5s ease-in-out infinite; }

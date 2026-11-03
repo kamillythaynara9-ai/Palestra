@@ -2,7 +2,7 @@
 
 Apresentação animada da palestra de **Jennifer Mayara Martins** no **Projeto Lutando pelo Futuro**, projeto que ensina boxe de graça na comunidade. A palestra é para as famílias dos alunos.
 
-A apresentação é uma página web: abre em qualquer navegador, tem fundos animados, letras que aparecem com efeito, cartão de round com som de gongo e momentos interativos. Não precisa de PowerPoint nem de internet na hora da palestra.
+A apresentação é uma página web: abre em qualquer navegador, tem fundos animados, letras que aparecem com efeito, cartão de round e momentos interativos. É silenciosa: não tem nenhum som. Não precisa de PowerPoint nem de internet na hora da palestra.
 
 ## Como apresentar
 
@@ -18,22 +18,23 @@ A apresentação é uma página web: abre em qualquer navegador, tem fundos anim
 | N | notas de quem apresenta, com o tempo de palestra e o próximo slide |
 | G | todos os slides, para pular para qualquer um |
 | B | tela de pausa com a logo (bom para quando passar os vídeos) |
-| S | liga e desliga o som do gongo e dos socos |
 | H | mostra a ajuda das teclas |
 
 Passadores de slide (clickers) funcionam, porque enviam PageDown e PageUp.
 
 ## Como a apresentação foi pensada
 
+- **Pouco texto na tela:** cada slide tem título, tópicos curtos (com subtópicos e etiquetas de data, idade ou lugar) e uma frase de impacto. O texto completo do roteiro está nas notas de cada slide (tecla N), para a Jennifer contar a história com as próprias palavras.
+
 - **Identidade visual do projeto:** o turquesa do selo, o vermelho da corda, o creme da letra feita à mão, pinceladas e letra manuscrita.
-- **O ambiente do boxe:** cordas do ringue no fundo, refletor, poste do corner, cartão de "ROUND" com gongo em cada parte da história, luvas, soco nas frases do "Bruno" e impacto nas frases fortes.
+- **O ambiente do boxe:** cordas do ringue no fundo, refletor, poste do corner, cartão de "ROUND" em cada parte da história, luvas, soco nas frases do "Bruno" e impacto nas frases fortes.
 - **As cores contam a história:** começa no ringue escuro, à noite. Passa pela chuva da infância, pela tempestade roxa e pelo amanhecer da cirurgia. Depois vêm o papel claro da terapia, as cores do ringue e, no fim, o dourado e o pôr do sol.
 - **A corda vermelha no rodapé é o fio condutor.** Ela cresce do primeiro ao último slide e vira um coração no final.
 - **Intervalo:** depois do Round 15 vem o momento interativo com Luca ("Silêncio, Bruno!"), Divertida-Mente (Ansiedade, Tristeza e Vergonha) e a mensagem do boxe. Os trechos dos filmes não tocam dentro dos slides: deixe os vídeos prontos em outra aba.
 
 ### Interações
 
-- **Cartão de round:** a cada round novo, uma pincelada atravessa a tela com o número e o gongo toca.
+- **Cartão de round:** a cada round novo, uma pincelada atravessa a tela com o número e o nome da parte.
 - **Silêncio, Bruno!:** cada clique dá um soco numa frase da voz de dúvida e ela sai voando.
 - **Cliques um a um:** perguntas, balões de fala, pensamentos e listas aparecem uma por clique.
 - **"Eu não era…":** cada frase aparece e o rótulo é riscado com tinta vermelha.
@@ -48,6 +49,7 @@ Passadores de slide (clickers) funcionam, porque enviam PageDown e PageUp.
 Todo o conteúdo fica em **`js/slides.js`**. Cada slide é um bloco `{ ... }`:
 
 - para trocar um texto, edite entre as aspas;
+- `itens` são os tópicos: `{ tag: "2016", t: "tópico", s: "subtópico" }`; `frase` é a frase de impacto; `subtitulo` aparece embaixo do título do round;
 - para mudar a ordem, mova o bloco inteiro;
 - `*palavra*` vira destaque em letra de pincel e `**frase**` vira negrito com marca-texto;
 - `clima` escolhe o fundo animado (lista em `js/fundo.js`);

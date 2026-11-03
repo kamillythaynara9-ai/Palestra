@@ -1,8 +1,8 @@
 /* =====================================================================
    MOTOR DA APRESENTAÇÃO
    Monta os slides a partir de js/slides.js, anima as letras, troca os
-   climas do fundo, abre o cartão de round com o gongo e cuida das
-   interações (socos, cartões que viram, tijolos, confete).
+   climas do fundo, abre o cartão de round e cuida das
+   interações (socos, cartões que viram, tijolos, confete), sem som.
 
    Tipos de slide: espera, capa, abertura, historia, citacao, impacto,
    pausa, virada, grade, passos, destaque, intervalo, nocaute, aviso,
@@ -10,7 +10,7 @@
    tijolos, levante, final, obrigada
 
    Teclas: → espaço PageDown avança · ← PageUp volta · F tela cheia
-           N notas · G todos os slides · B pausa · S som · H ajuda
+           N notas · G todos os slides · B pausa · H ajuda
    ===================================================================== */
 (function () {
   "use strict";
@@ -71,6 +71,19 @@
   const limpo = s => String(s || "").replace(/\*/g, "");
   const rotRound = r => r === "INT" ? "INTERVALO" : "ROUND " + pad(r);
 
+  /* ---------------- peças comuns ---------------- */
+  const FIO = `<svg class="fio" style="top:880px" viewBox="0 0 2000 120" data-a="desenha" aria-hidden="true"><path class="traco" d="M0 60 C 300 10 500 110 800 60 S 1300 10 1600 60 S 1900 100 2000 50" stroke="#C8202F" stroke-width="16" fill="none" stroke-linecap="round"/><path d="M0 60 C 300 10 500 110 800 60 S 1300 10 1600 60 S 1900 100 2000 50" stroke="rgba(255,190,190,.5)" stroke-width="5" stroke-dasharray="8 14" fill="none"/></svg>`;
+  function colEsq(s) {
+    const r = s.round, titulo = s.titulo || RD[r];
+    const moveis = s.carnaval ? `<div class="moveis">${MOVEIS.map(([c, p]) => `<svg viewBox="0 0 100 100" fill="${c}" data-a="pop" data-g="140" aria-hidden="true">${p}</svg>`).join("")}</div>` : "";
+    return `<div class="col-esq">
+      <div class="chip-round${r === "INT" ? " int" : ""}" data-a="pop"><span class="fundo-pincel"></span>${r === "INT" ? "<strong>INTERVALO</strong>" : `<b>ROUND</b><strong>${pad(r)}</strong>`}</div>
+      <h2 class="titulo-round" data-a="palavras">${md(titulo)}</h2>${s.subtitulo ? `<p class="subtitulo-round" data-a="palavras">${md(s.subtitulo)}</p>` : ""}${SVG.rabisco}${moveis}</div>`;
+  }
+  function decor(s) {
+    return s.curativos ? [[1480, 150, 22], [1590, 820, -14]].map(([x, y, g]) => `<div class="curativo" style="left:${x}px;top:${y}px;rotate:${g}deg" data-a="curativo" data-rot="${g}">${SVG.curativo}</div>`).join("") : "";
+  }
+
   /* ---------------- modelos de slide ---------------- */
   const M = {
     espera: s => `<div class="espera">
@@ -93,16 +106,13 @@
       <p class="texto-medio" data-a="palavras">${md(s.textos[0])}</p>
       <p class="texto-medio" style="color:var(--tx);font-family:var(--f-mao);font-size:54px" data-a="palavras">${md(s.textos[1])}</p></div>`,
 
-    historia: s => {
-      const r = s.round, titulo = s.titulo || RD[r];
-      const moveis = s.carnaval ? `<div class="moveis">${MOVEIS.map(([c, p]) => `<svg viewBox="0 0 100 100" fill="${c}" data-a="pop" data-g="140" aria-hidden="true">${p}</svg>`).join("")}</div>` : "";
-      const curativos = s.curativos ? [[1480, 150, 22], [1590, 820, -14]].map(([x, y, g]) => `<div class="curativo" style="left:${x}px;top:${y}px;rotate:${g}deg" data-a="curativo" data-rot="${g}">${SVG.curativo}</div>`).join("") : "";
-      const fio = s.fio ? `<svg class="fio" style="top:880px" viewBox="0 0 2000 120" data-a="desenha" aria-hidden="true"><path class="traco" d="M0 60 C 300 10 500 110 800 60 S 1300 10 1600 60 S 1900 100 2000 50" stroke="#C8202F" stroke-width="16" fill="none" stroke-linecap="round"/><path d="M0 60 C 300 10 500 110 800 60 S 1300 10 1600 60 S 1900 100 2000 50" stroke="rgba(255,190,190,.5)" stroke-width="5" stroke-dasharray="8 14" fill="none"/></svg>` : "";
-      const textos = s.textos.map(t => `<p data-a="palavras">${md(t)}</p>`).join("") + (s.aviso ? `<p class="aviso-cartao" data-a="sobe">${md(s.aviso)}</p>` : "");
-      return `<div class="col-esq">
-        <div class="chip-round${r === "INT" ? " int" : ""}" data-a="pop"><span class="fundo-pincel"></span>${r === "INT" ? "<strong>INTERVALO</strong>" : `<b>ROUND</b><strong>${pad(r)}</strong>`}</div>
-        <h2 class="titulo-round" data-a="palavras">${md(titulo)}</h2>${SVG.rabisco}${moveis}</div>
-        <div class="col-dir">${textos}</div>${curativos}${fio}`;
+    historia: s => colEsq(s) + `<div class="col-dir">${s.textos.map(t => `<p data-a="palavras">${md(t)}</p>`).join("")}${s.aviso ? `<p class="aviso-cartao" data-a="sobe">${md(s.aviso)}</p>` : ""}</div>` + decor(s),
+
+    topicos: s => {
+      const itens = s.itens.map(it => `<div class="topico" data-a="esq" data-g="170"><span class="marca" aria-hidden="true"></span><div class="topico-txt">${it.tag ? `<span class="tag">${esc(it.tag)}</span>` : ""}<p class="t">${md(it.t)}</p>${it.s ? `<p class="s">${md(it.s)}</p>` : ""}</div></div>`).join("");
+      const frase = s.frase ? `<p class="topicos-frase" data-a="palavras" data-espera="250">${md(s.frase)}</p>` : "";
+      const aviso = s.aviso ? `<p class="aviso-cartao" data-a="sobe">${md(s.aviso)}</p>` : "";
+      return colEsq(s) + `<div class="col-dir topicos">${itens}${frase}${aviso}</div>` + decor(s);
     },
 
     citacao: s => `<div class="citacao${s.menor ? " menor" : ""}${s.maior ? " maior" : ""}">
@@ -193,7 +203,7 @@
         <h2 class="frase-grande" data-a="letras">${frase}</h2></div>`;
     },
 
-    trio: s => `<div class="trio">${s.linhas.map((l, k) => `<p data-passo="${k + 1}" data-a="jab" data-fx="soco">${md(l)}</p>`).join("")}</div>`,
+    trio: s => `<div class="trio">${s.intro ? `<p class="intro-trio" data-a="palavras">${md(s.intro)}</p>` : ""}${s.linhas.map((l, k) => `<p data-passo="${k + 1}" data-a="jab" data-fx="soco">${md(l)}</p>`).join("")}</div>`,
 
     mar: s => `<div class="centro esq">
       <p class="texto-medio" style="text-align:left;color:var(--tx)" data-a="palavras">${md(s.texto)}</p>
@@ -273,7 +283,7 @@
     el.className = `slide ${tema} tipo-${s.tipo} clima-${s.clima}` + (s.tipo === "emocao" ? " " + s.nome.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase() : "");
     el.setAttribute("aria-hidden", "true");
     el.setAttribute("aria-label", `Slide ${i + 1}`);
-    el.innerHTML = (M[s.tipo] || M.historia)(s);
+    el.innerHTML = (M[s.tipo] || M.historia)(s) + (s.fio ? FIO : "");
     $$("[data-a]", el).forEach(x => {
       const a = x.dataset.a;
       if (a === "letras" || a === "impacto") dividir(x, true);
@@ -284,42 +294,8 @@
     return el;
   });
 
-  /* ---------------- som (desligado até apertar S) ---------------- */
-  const Som = {
-    ligado: false, ctx: null,
-    prep() { if (!this.ctx) try { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { } if (this.ctx && this.ctx.state === "suspended") this.ctx.resume(); return this.ligado && this.ctx; },
-    gongo() {
-      const c = this.prep(); if (!c) return; const t = c.currentTime;
-      [[523, .5, 2.6], [1046, .32, 2.1], [1568, .18, 1.5], [2349, .1, .9], [3136, .05, .6]].forEach(([f, g, d]) => {
-        const o = c.createOscillator(), v = c.createGain(); o.type = "sine"; o.frequency.value = f;
-        v.gain.setValueAtTime(0, t); v.gain.linearRampToValueAtTime(g * .45, t + .004); v.gain.exponentialRampToValueAtTime(.0001, t + d);
-        o.connect(v).connect(c.destination); o.start(t); o.stop(t + d);
-      });
-    },
-    soco() {
-      const c = this.prep(); if (!c) return; const t = c.currentTime;
-      const buf = c.createBuffer(1, c.sampleRate * .16, c.sampleRate), d = buf.getChannelData(0);
-      for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 3);
-      const n = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain(); n.buffer = buf; f.type = "lowpass"; f.frequency.value = 900; g.gain.value = .55;
-      n.connect(f).connect(g).connect(c.destination); n.start(t);
-      const o = c.createOscillator(), v = c.createGain(); o.frequency.setValueAtTime(140, t); o.frequency.exponentialRampToValueAtTime(42, t + .2);
-      v.gain.setValueAtTime(.6, t); v.gain.exponentialRampToValueAtTime(.001, t + .22); o.connect(v).connect(c.destination); o.start(t); o.stop(t + .24);
-    },
-    pop() {
-      const c = this.prep(); if (!c) return; const t = c.currentTime;
-      const o = c.createOscillator(), v = c.createGain(); o.type = "triangle"; o.frequency.setValueAtTime(520, t); o.frequency.exponentialRampToValueAtTime(980, t + .09);
-      v.gain.setValueAtTime(.18, t); v.gain.exponentialRampToValueAtTime(.001, t + .14); o.connect(v).connect(c.destination); o.start(t); o.stop(t + .15);
-    }
-  };
-  const botaoSom = $("#botao-som");
-  function alternarSom() {
-    Som.ligado = !Som.ligado; botaoSom.textContent = Som.ligado ? "Som: ligado" : "Som: desligado";
-    botaoSom.setAttribute("aria-pressed", String(Som.ligado));
-    try { localStorage.setItem("palestra-som", Som.ligado ? "1" : "0"); } catch (e) { }
-    if (Som.ligado) Som.gongo();
-  }
-  try { if (localStorage.getItem("palestra-som") === "1") { Som.ligado = true; botaoSom.textContent = "Som: ligado"; botaoSom.setAttribute("aria-pressed", "true"); } } catch (e) { }
-  botaoSom.addEventListener("click", e => { e.stopPropagation(); alternarSom(); botaoSom.blur(); });
+  /* ---------------- sem som: a apresentação é silenciosa ---------------- */
+  const Som = { gongo() { }, soco() { }, pop() { } };
 
   /* ---------------- animações ---------------- */
   let timers = [];
@@ -459,7 +435,7 @@
     $$(".alvo", sl).forEach(a => a.style.opacity = "");
   }
 
-  /* ---------------- cartão de round com gongo ---------------- */
+  /* ---------------- cartão de round ---------------- */
   function cartaoRound(r) {
     if (calmo) return 0;
     $(".rc-round", cortina).textContent = r === "INT" ? "INTERVALO" : "ROUND";
@@ -583,7 +559,6 @@
     else if (k === "g" || k === "G") { grade.classList.add("aberto"); const b = $("#grade .atual"); if (b) b.focus(); }
     else if (k === "f" || k === "F") telaCheia();
     else if (k === "b" || k === "B" || k === ".") pausa.classList.toggle("ativo");
-    else if (k === "s" || k === "S") alternarSom();
     else if (k === "h" || k === "H" || k === "?") mostrarDica();
     else if (k === "Escape") { notas.classList.remove("aberto"); pausa.classList.remove("ativo"); }
   });
