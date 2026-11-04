@@ -81,7 +81,7 @@
       <h2 class="titulo-round" data-a="palavras">${md(titulo)}</h2>${s.subtitulo ? `<p class="subtitulo-round" data-a="palavras">${md(s.subtitulo)}</p>` : ""}${SVG.rabisco}${moveis}</div>`;
   }
   function decor(s) {
-    return s.curativos ? [[1480, 150, 22], [1590, 820, -14]].map(([x, y, g]) => `<div class="curativo" style="left:${x}px;top:${y}px;rotate:${g}deg" data-a="curativo" data-rot="${g}">${SVG.curativo}</div>`).join("") : "";
+    return s.curativos ? [[1650, 250, 22], [1660, 580, -14]].map(([x, y, g]) => `<div class="curativo" style="left:${x}px;top:${y}px;rotate:${g}deg" data-a="curativo" data-rot="${g}">${SVG.curativo}</div>`).join("") : "";
   }
 
   /* ---------------- modelos de slide ---------------- */
