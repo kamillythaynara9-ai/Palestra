@@ -177,6 +177,7 @@
       const caps = s.momentos.map((m, k) => `<button type="button" class="cap${k === 0 ? " primeiro" : ""}${m.lado ? " alinha-" + m.lado : ""}" data-t="${m.t}" style="left:${(m.t / s.duracao * 100).toFixed(2)}%"><i></i><span>${esc(m.nome)}</span></button>`).join("");
       const duv = s.duvidas.map((d, k) => `<p class="alvo duvida" style="--inc:${k % 2 ? 2.5 : -2}deg">${esc(d[0])}</p>`).join("");
       return `<div class="cinema" data-id="${s.id}">
+        <div class="cine-ceu" aria-hidden="true"><i class="f-medo"></i><i class="f-bruno"></i><i class="f-grito"></i><i class="f-coragem"></i><i class="f-voo"></i><i class="vinheta"></i></div>
         <span class="cine-luz e" aria-hidden="true"></span><span class="cine-luz d" aria-hidden="true"></span>
         <div class="cine-topo" data-a="sobe"><p class="filme-rotulo">${SVG.play}${esc(s.rotulo)}</p><h2 class="cine-titulo">${md(s.titulo)}</h2></div>
         <div class="cine-medidor" data-a="esq"><span class="med-rot cor">Coragem</span><div class="tubo"><div class="enche"></div><span class="marcador">${SVG.coracaoCheio}</span></div><span class="med-rot medo">Medo</span></div>
@@ -349,6 +350,8 @@
       $$(".duvida", c).forEach((d, k) => d.classList.toggle("vis", fim || t >= s.duvidas[k][1]));
       let mi = 0; s.momentos.forEach((m, k) => { if (t >= m.t) mi = k; });
       $$(".cap", c).forEach((b, k) => { b.classList.toggle("passou", k <= mi && (t > 0 || k === 0)); b.classList.toggle("agora", k === mi); });
+      const fase = ["medo", "bruno", "grito", "coragem", "voo"][Math.min(mi, 4)];
+      if (c.dataset.fase !== fase) c.dataset.fase = fase;
       if (mi !== c._mom) {
         c._mom = mi; const sp = $(".cine-legenda span", c);
         sp.innerHTML = md(s.momentos[mi].txt);

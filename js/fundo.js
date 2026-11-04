@@ -5,7 +5,7 @@
    o fundo se mistura devagar, sem corte.
 
    Climas: noite, chuva, tempestade, luz, amanhecer, papel, ringue,
-           mar, emocoes, ansiedade, tristeza, vergonha, sol, ouro, final
+           mar, cinema, emocoes, ansiedade, tristeza, vergonha, sol, ouro, final
    ===================================================================== */
 (function () {
   "use strict";
@@ -31,6 +31,8 @@
                   part: [["faiscas", 60, ["#EF4A5A", "#F2A93B", "#FFE3B0"]], ["poeira", 60, ["#F4ECDD"]]], borda: "#050D0F" },
     mar:        { tema: "escuro", ceu: ["#0A4A58", "#0E7880", "#0B5F69"], ondas: ["rgba(20,166,160,.55)", "rgba(11,120,128,.75)", "rgba(6,80,92,.95)"],
                   sol: { x: .78, y: .18, r: .28, cor: "255,230,160" }, part: [["bolhas", 42, ["#E6FFFB", "#BDF2EC"]]], borda: "#08414D" },
+    cinema:     { tema: "escuro", ceu: ["#151229", "#0D0B1B", "#07060F"], luz: { x: .5, forca: .26, cor: "205,215,255" },
+                  part: [["poeira", 70, ["#F4ECDD", "#CFC4FF", "#FFE3B0"]]], borda: "#07060F" },
     emocoes:    { tema: "escuro", ceu: ["#2A1F5C", "#1B1846", "#110E30"], orbes: ["#F6C445", "#3D7CC9", "#E0402F", "#8566C9", "#3F8F58", "#D9621A", "#C9467E"],
                   part: [["poeira", 40, ["#FFFFFF"]]], borda: "#110E30" },
     ansiedade:  { tema: "escuro", ceu: ["#C55B1C", "#A84414", "#7C2C0B"], part: [["risco", 80, ["#FFE3B0", "#FFFFFF", "#FFC07A"]]], borda: "#7C2C0B" },

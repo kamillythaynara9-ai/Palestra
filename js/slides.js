@@ -207,7 +207,7 @@ window.SLIDES = [
 
   /* ---------------- INTERVALO: LUCA, DIVERTIDA-MENTE E O BOXE ---------------- */
   /* 16 */
-  { id: "luca", tipo: "cinema", clima: "mar", round: "INT",
+  { id: "luca", tipo: "cinema", clima: "cinema", round: "INT",
     rotulo: "Trecho do filme · Luca (Pixar, 2021)",
     titulo: "Silêncio, *Bruno!*",
     video: "assets/video/luca.mp4",
