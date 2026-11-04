@@ -1,1 +1,2 @@
-assets/video/
+assets/video/*.h264
+assets/video/*.mp3

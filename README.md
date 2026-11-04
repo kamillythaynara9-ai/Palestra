@@ -96,4 +96,4 @@ ffmpeg -i assets/video/luca.mp4 -an -vf fps=30 -c:v libx264 -preset veryfast -cr
 ffmpeg -i assets/video/luca.mp4 -vn -c:a libmp3lame -b:a 112k assets/video/luca.mp3
 ```
 
-O arquivo do vídeo não fica no GitHub (é um trecho do filme). Para rodar a pasta do código, coloque o vídeo em `assets/video/luca.mp4` e a capa em `assets/video/luca-capa.jpg`. O arquivo `apresentacao-offline.html` do pacote já traz o vídeo dentro.
+O vídeo fica em `assets/video/luca.mp4` (com a capa em `assets/video/luca-capa.jpg`) e é publicado junto com o site. O arquivo `apresentacao-offline.html` também traz o vídeo dentro.
