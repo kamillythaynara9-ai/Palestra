@@ -1559,6 +1559,7 @@ window.SLIDES = [
   }
 
   /* ---------------- cartão de round ---------------- */
+  const DUR_ROUND = 2800; // tempo total do cartão de round (ms)
   function cartaoRound(r) {
     if (calmo) return 0;
     $(".rc-round", cortina).textContent = r === "INT" ? "INTERVALO" : "ROUND";
@@ -1566,13 +1567,13 @@ window.SLIDES = [
     $(".rc-titulo", cortina).textContent = r === "INT" ? "Momento interativo" : limpo(RD[r]);
     $(".rc-faixa", cortina).style.backgroundImage = (r === "INT" || r % 2 === 0) ? faixaTurquesa : faixaVermelha;
     cortina.classList.add("ativo");
-    $(".rc-faixa", cortina).animate([{ clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", offset: .26 }, { clipPath: "inset(0 0% 0 0)", offset: .74 }, { clipPath: "inset(0 0 0 100%)" }], { duration: 1550, easing: "cubic-bezier(.6,0,.3,1)" });
-    $(".rc-conteudo", cortina).animate([{ opacity: 0, scale: "1.7", filter: "blur(10px)" }, { opacity: 1, scale: "1", filter: "blur(0px)", offset: .24 }, { opacity: 1, scale: "1", translate: "0 0", offset: .72 }, { opacity: 0, translate: "280px 0", filter: "blur(6px)" }], { duration: 1550, easing: "ease-out" });
+    $(".rc-faixa", cortina).animate([{ clipPath: "inset(0 100% 0 0)", easing: "cubic-bezier(.6,0,.3,1)" }, { clipPath: "inset(0 0% 0 0)", offset: .17 }, { clipPath: "inset(0 0% 0 0)", offset: .84, easing: "cubic-bezier(.6,0,.3,1)" }, { clipPath: "inset(0 0 0 100%)" }], { duration: DUR_ROUND });
+    $(".rc-conteudo", cortina).animate([{ opacity: 0, scale: "1.7", filter: "blur(10px)", easing: "ease-out" }, { opacity: 1, scale: "1", filter: "blur(0px)", offset: .19 }, { opacity: 1, scale: "1", translate: "0 0", offset: .82, easing: "ease-in" }, { opacity: 0, translate: "280px 0", filter: "blur(6px)" }], { duration: DUR_ROUND });
     $(".rc-sino", cortina).animate([{ rotate: "0deg" }, { rotate: "-26deg" }, { rotate: "24deg" }, { rotate: "-16deg" }, { rotate: "10deg" }, { rotate: "0deg" }], { duration: 1000, delay: 240 });
     agendar(() => { Som.gongo(); palco.classList.remove("tremendo"); void palco.offsetWidth; palco.classList.add("tremendo"); }, 300);
     agendar(() => Som.gongo(), 560);
-    agendar(() => cortina.classList.remove("ativo"), 1560);
-    return 1150;
+    agendar(() => cortina.classList.remove("ativo"), DUR_ROUND + 10);
+    return DUR_ROUND - 400;
   }
 
   /* ---------------- navegação ---------------- */
