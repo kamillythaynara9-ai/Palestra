@@ -31,10 +31,11 @@ html = html.replace(/<script src="(js\/[\w.-]+\.js)"><\/script>/g, (m, p) => `<s
 // fotos e logo
 html = embutirImagens(html);
 
-// trecho do filme: a capa vai sempre embutida; o vídeo só no arquivo offline
-// (na página do Claude ele é publicado como arquivo separado, em assets/video/)
+// trecho do filme: a capa vai sempre embutida
 html = html.replace(/assets\/video\/[\w.-]+\.jpg/g, (m) => dataURI(m));
-if (!process.argv.includes("--artifact")) html = html.replace(/assets\/video\/[\w.-]+\.mp4/g, (m) => dataURI(m));
+// o vídeo vai embutido nas duas versões; na página do Claude ele também é publicado
+// como arquivo separado (videoArquivo), que fica de reserva
+html = html.replace(/(video: ")(assets\/video\/[\w.-]+\.mp4)(")/, (m, a, p, z) => `${a}${dataURI(p)}${z}, videoArquivo: "${p}"`);
 
 const artifact = process.argv.includes("--artifact");
 if (artifact) {

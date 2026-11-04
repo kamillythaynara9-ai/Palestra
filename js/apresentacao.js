@@ -183,6 +183,7 @@
         <div class="cine-moldura" data-a="pop"><div class="ambi" aria-hidden="true"></div><div class="lampadas" aria-hidden="true"></div>
           <div class="cinema-tela"><video preload="auto" playsinline poster="${s.capa}" src="${s.video}"></video>
             <div class="cine-capa"><span class="botao-play">${SVG.play}</span><p>Clique para começar</p></div>
+            <div class="cine-erro"><p>O vídeo não carregou nesta página.</p><small>Abra o arquivo Apresentacao_offline.html ou toque o Trecho_Luca_1min21.mp4 em outra janela.</small></div>
             <div class="cine-fim"><p>E você?</p><h3>${md(s.final)}</h3></div>
             <div class="cine-flash" aria-hidden="true"></div></div></div>
         <div class="cine-linha" data-a="sobe"><div class="trilho"><div class="feito"></div>${caps}</div></div>
@@ -387,10 +388,32 @@
       passar(); c._ambi = setInterval(passar, 220);
     }
 
+    /* o vídeo tenta várias formas de carregar, na ordem: embutido (blob), embutido (data:),
+       arquivo publicado ao lado da página, e o mesmo arquivo baixado como blob */
+    function deDataURI(uri) {
+      const i = uri.indexOf(","), tipo = uri.slice(5, uri.indexOf(";")), bin = atob(uri.slice(i + 1));
+      const u8 = new Uint8Array(bin.length); for (let k = 0; k < bin.length; k++) u8[k] = bin.charCodeAt(k);
+      return URL.createObjectURL(new Blob([u8], { type: tipo }));
+    }
+    function fontes(c) {
+      const v = c._v, s = dados(c), orig = v.getAttribute("src"), lista = [];
+      if (orig.startsWith("data:")) { lista.push(() => deDataURI(orig), () => orig); if (s.videoArquivo) lista.push(() => s.videoArquivo, () => fetch(s.videoArquivo).then(r => { if (!r.ok) throw 0; return r.blob(); }).then(b => URL.createObjectURL(b))); }
+      else lista.push(() => orig, () => fetch(orig).then(r => { if (!r.ok) throw 0; return r.blob(); }).then(b => URL.createObjectURL(b)));
+      let i = -1;
+      const proxima = () => {
+        i++;
+        if (i >= lista.length) { c.classList.add("sem-video"); return; }
+        Promise.resolve().then(lista[i]).then(src => { v.src = src; v.load(); }).catch(proxima);
+      };
+      v.addEventListener("error", () => { if (v.getAttribute("src")) proxima(); });
+      v.removeAttribute("src");
+      proxima();
+    }
+
     function iniciar(c) {
       const v = c._v = $("video", c);
       lampadas(c);
-      if (v.getAttribute("src").startsWith("data:")) fetch(v.getAttribute("src")).then(r => r.blob()).then(b => { v.src = URL.createObjectURL(b); }).catch(() => { });
+      fontes(c);
       v.addEventListener("timeupdate", () => tick(c));
       v.addEventListener("seeked", () => tick(c));
       v.addEventListener("play", () => { c.classList.add("tocando", "comecou"); c.classList.remove("acabou"); ambi(c); });
