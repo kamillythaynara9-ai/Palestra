@@ -207,11 +207,25 @@ window.SLIDES = [
 
   /* ---------------- INTERVALO: LUCA, DIVERTIDA-MENTE E O BOXE ---------------- */
   /* 16 */
-  { id: "lu1", tipo: "nocaute", clima: "mar", round: "INT",
-    rotulo: "Trecho do filme · Luca",
-    grito: "“Silêncio, *Bruno!*”",
-    frases: ["“Você não consegue.”", "“Você vai falhar.”", "“É melhor nem tentar.”"],
-    notas: "INTERVALO, um pequeno momento interativo: Luca (a voz interior que diz “você não consegue”), Divertida-Mente (as emoções que sentimos e nem sempre sabemos explicar), a minha história (reconhecer as dores, buscar ajuda e acreditar em mim) e a mensagem do boxe (assim como treinamos o corpo, podemos aprender a cuidar das emoções, estabelecer limites e pedir ajuda). Os trechos dos filmes não tocam dentro dos slides: deixe os vídeos prontos em outra aba; a tecla B mostra a tela de pausa com a logo. || LUCA: mostre a cena em que o Alberto ensina o Luca a dizer “Silêncio, Bruno!”. A própria Pixar explicou que o Bruno representa a voz de dúvida que impede o Luca de avançar. Depois, cada clique dá um soco numa frase e ela sai voando. Pergunte às crianças: Quem aqui já deixou de tentar alguma coisa por medo de errar? Quem já pensou que não era bom o suficiente? Quem já ouviu aquela voz na cabeça dizendo que não conseguiria? “Sabe aquele Bruno que aparece na nossa cabeça? Às vezes ele diz que não somos capazes, que vamos fracassar ou que ninguém vai gostar de nós. Mas precisamos aprender que sentir medo não significa que somos incapazes. Coragem não é não sentir medo. É aprender a seguir em frente, com cuidado, mesmo quando sentimos medo.” Ressalva: não precisamos silenciar todas as emoções ou ignorar os sinais de perigo. O objetivo é aprender a reconhecer o medo sem deixar que ele decida tudo por nós. Conexão com a sua história: você também não acreditava que seria capaz de estudar, crescer profissionalmente e reconstruir a própria vida (volta no Round 12). Para achar a cena: https://www.youtube.com/results?search_query=Luca+Sil%C3%AAncio+Bruno" },
+  { id: "luca", tipo: "cinema", clima: "mar", round: "INT",
+    rotulo: "Trecho do filme · Luca (Pixar, 2021)",
+    titulo: "Silêncio, *Bruno!*",
+    video: "assets/video/luca.mp4",
+    capa: "assets/video/luca-capa.jpg",
+    duracao: 81,
+    duvidas: [["Você não consegue.", 20], ["Você vai falhar.", 26], ["É melhor nem tentar.", 32], ["Ninguém vai gostar de você.", 38]],
+    grito: 44,
+    voo: 69,
+    momentos: [
+      { t: 0, nome: "O medo", txt: "Repare: o Luca quer ir, mas o medo trava." },
+      { t: 18, nome: "O Bruno", txt: "Aquela voz que diz “você não consegue” ganha um nome: *Bruno.*" },
+      { t: 44, nome: "Silêncio!", lado: "fim", txt: "Reconhecer o medo, *sem deixar que ele decida tudo.*" },
+      { t: 52, nome: "Coragem", lado: "ini", txt: "Coragem é seguir em frente, com cuidado, *mesmo sentindo medo.*" },
+      { t: 69, nome: "O voo", txt: "Sentir medo *não significa ser incapaz.*" }
+    ],
+    medidor: [[0, .22], [17, .12], [40, .05], [44, .42], [52, .7], [69, 1], [81, 1]],
+    final: "Qual é o *seu Bruno?*",
+    notas: "INTERVALO, um pequeno momento interativo: Luca (a voz interior que diz “você não consegue”), Divertida-Mente (as emoções que sentimos e nem sempre sabemos explicar), a minha história (reconhecer as dores, buscar ajuda e acreditar em mim) e a mensagem do boxe (assim como treinamos o corpo, podemos aprender a cuidar das emoções, estabelecer limites e pedir ajuda). || COMO USAR ESTE SLIDE: o trecho do Luca (1min21) já está dentro do slide. O 1º clique (ou clicar no vídeo) dá o play; clicar no vídeo pausa; a tecla P também pausa e continua. Os nomes embaixo do vídeo (O medo, O Bruno, Silêncio!, Coragem, O voo) pulam para aquela parte. Enquanto o vídeo passa, as frases do Bruno aparecem do lado direito, o medidor de coragem sobe à esquerda e as frases embaixo acompanham a cena. No fim aparece “E você? Qual é o seu Bruno?”: a cada clique, a luva dá um soco numa frase do Bruno (chame as crianças: “vamos mandar o Bruno calar?”). || A própria Pixar explicou que o Bruno representa a voz de dúvida que impede o Luca de avançar. Depois do vídeo, pergunte às crianças: Quem aqui já deixou de tentar alguma coisa por medo de errar? Quem já pensou que não era bom o suficiente? Quem já ouviu aquela voz na cabeça dizendo que não conseguiria? “Sabe aquele Bruno que aparece na nossa cabeça? Às vezes ele diz que não somos capazes, que vamos fracassar ou que ninguém vai gostar de nós. Mas precisamos aprender que sentir medo não significa que somos incapazes. Coragem não é não sentir medo. É aprender a seguir em frente, com cuidado, mesmo quando sentimos medo.” Ressalva: não precisamos silenciar todas as emoções ou ignorar os sinais de perigo. O objetivo é aprender a reconhecer o medo sem deixar que ele decida tudo por nós. Conexão com a sua história: você também não acreditava que seria capaz de estudar, crescer profissionalmente e reconstruir a própria vida (volta no Round 12)." },
   /* 17 */
   { id: "dm1", tipo: "emocoes", clima: "emocoes", round: "INT",
     rotulo: "Divertida-Mente 1 e 2",

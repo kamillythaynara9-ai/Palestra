@@ -422,3 +422,94 @@ strong {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .2s !important; }
   #grao { display: none; }
 }
+
+/* ---------- cinema (trecho do filme com a margem interativa) ---------- */
+.cinema { position: absolute; inset: 0; --ambi-e: #1E9AA6; --ambi-d: #13324A; --ambi-m: #4CC6CF; }
+.cine-topo { position: absolute; left: 414px; top: 52px; width: 1092px; display: flex; align-items: center; justify-content: space-between; gap: 30px; }
+.cine-topo .filme-rotulo { font-size: 28px; letter-spacing: 5px; padding: 10px 26px 8px 14px; white-space: nowrap; }
+.cine-topo .filme-rotulo svg { width: 38px; height: 38px; }
+.cine-titulo { font-family: var(--f-pincel); font-weight: 400; font-size: 68px; white-space: nowrap; line-height: 1; color: var(--creme); text-shadow: 0 6px 30px rgba(0,0,0,.35); }
+.cine-titulo em.pincel { color: var(--ouro-claro); }
+
+/* luzes de palco que varrem a tela */
+.cine-luz { position: absolute; top: -80px; width: 520px; height: 1200px; pointer-events: none; mix-blend-mode: screen; opacity: .16; transition: opacity 1.2s, filter 1.2s;
+  background: linear-gradient(180deg, rgba(255,240,200,.9), rgba(255,240,200,0) 85%); clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%); transform-origin: 50% 0; }
+.cine-luz.e { left: 120px; rotate: 24deg; }
+.cine-luz.d { right: 120px; rotate: -24deg; }
+.cinema.tocando .cine-luz { opacity: .28; animation: varrer 7s ease-in-out infinite alternate; }
+.cinema.tocando .cine-luz.d { animation-delay: -3.5s; }
+.cinema.voando .cine-luz { opacity: .45; filter: hue-rotate(-20deg) saturate(1.6); animation-duration: 2.6s; }
+@keyframes varrer { from { transform: rotate(-14deg); } to { transform: rotate(14deg); } }
+
+/* moldura com lâmpadas de cinema */
+.cine-moldura { position: absolute; left: 414px; top: 176px; width: 1092px; height: 614px; border-radius: 26px; background: #0A1519; box-shadow: 0 30px 80px rgba(0,0,0,.55), inset 0 0 0 4px rgba(244,236,221,.12); }
+.cine-moldura .ambi { position: absolute; inset: -70px -120px; z-index: -1; border-radius: 120px; opacity: .25; filter: blur(70px); transition: opacity 1.4s;
+  background: radial-gradient(ellipse 45% 70% at 8% 50%, var(--ambi-e), transparent 70%), radial-gradient(ellipse 45% 70% at 92% 50%, var(--ambi-d), transparent 70%), radial-gradient(ellipse 60% 40% at 50% 100%, var(--ambi-m), transparent 70%); }
+.cinema.tocando .cine-moldura .ambi { opacity: .9; }
+.lampadas { position: absolute; inset: 0; pointer-events: none; }
+.lampadas i { position: absolute; width: 13px; height: 13px; margin: -6.5px 0 0 -6.5px; border-radius: 50%; background: #FFE7A8; opacity: .45; box-shadow: 0 0 8px 2px rgba(255,210,122,.45); }
+.cinema.tocando .lampadas i { animation: lampada 1.2s steps(1) infinite; animation-delay: calc(var(--k) * -.4s); }
+.cinema.voando .lampadas i { background: #FFF6D8; animation-duration: .45s; box-shadow: 0 0 14px 4px rgba(255,210,122,.8); }
+.cinema.acabou .lampadas i { opacity: 1; box-shadow: 0 0 14px 4px rgba(239,74,90,.6); background: #FFD27A; }
+@keyframes lampada { 0% { opacity: 1; box-shadow: 0 0 14px 4px rgba(255,210,122,.85); } 33% { opacity: .3; box-shadow: 0 0 4px 1px rgba(255,210,122,.2); } }
+
+.cinema-tela { position: absolute; left: 26px; top: 26px; width: 1040px; height: 562px; border-radius: 14px; overflow: hidden; background: #000; cursor: pointer; }
+.cinema-tela video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cine-capa { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; background: radial-gradient(circle, rgba(10,21,25,.25), rgba(10,21,25,.7)); transition: opacity .6s; }
+.cine-capa .botao-play { width: 150px; height: 150px; filter: drop-shadow(0 10px 30px rgba(0,0,0,.5)); animation: pulso-play 1.8s ease-in-out infinite; }
+.cine-capa .botao-play svg { width: 100%; height: 100%; }
+.cine-capa p { font-family: var(--f-round); font-size: 34px; letter-spacing: 8px; color: var(--creme); text-shadow: 0 2px 12px rgba(0,0,0,.6); }
+@keyframes pulso-play { 50% { scale: 1.08; } }
+.cinema.comecou .cine-capa { opacity: 0; pointer-events: none; }
+.cine-fim { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; opacity: 0; pointer-events: none; transition: opacity 1s .3s;
+  background: radial-gradient(circle, rgba(10,21,25,.55), rgba(10,21,25,.88)); }
+.cine-fim p { font-family: var(--f-mao); font-size: 54px; color: var(--creme); }
+.cine-fim h3 { font-family: var(--f-pincel); font-weight: 400; font-size: 112px; line-height: 1.05; color: var(--creme); }
+.cine-fim h3 em.pincel { color: var(--ouro-claro); }
+.cinema.acabou .cine-fim { opacity: 1; }
+.cine-flash { position: absolute; inset: 0; background: #FFF6E0; opacity: 0; pointer-events: none; }
+
+/* linha do tempo com os momentos (clicáveis) */
+.cine-linha { position: absolute; left: 440px; top: 826px; width: 1040px; height: 70px; }
+.cine-linha .trilho { position: absolute; left: 0; right: 0; top: 10px; height: 8px; border-radius: 8px; background: rgba(244,236,221,.18); }
+.cine-linha .feito { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 8px; background: linear-gradient(90deg, #8566C9, var(--vermelho-claro) 55%, var(--ouro-claro)); box-shadow: 0 0 14px rgba(255,210,122,.5); }
+.cap { position: absolute; top: -9px; translate: -50% 0; display: flex; flex-direction: column; align-items: center; gap: 8px; background: none; border: 0; padding: 0; cursor: pointer; color: var(--creme); }
+.cap.primeiro, .cap.alinha-ini { translate: -13px 0; align-items: flex-start; }
+.cap.alinha-fim { translate: calc(-100% + 13px) 0; align-items: flex-end; }
+.cap i { width: 26px; height: 26px; border-radius: 50%; background: #13324A; border: 4px solid rgba(244,236,221,.5); transition: background .4s, border-color .4s, scale .4s; }
+.cap span { font-family: var(--f-round); font-size: 26px; letter-spacing: 3px; opacity: .6; white-space: nowrap; transition: opacity .4s, color .4s; }
+.cap.passou i { background: var(--ouro-claro); border-color: var(--creme); }
+.cap.agora i { scale: 1.25; box-shadow: 0 0 0 8px rgba(255,210,122,.25); }
+.cap.agora span { opacity: 1; color: var(--ouro-claro); }
+.cine-legenda { position: absolute; left: 340px; top: 916px; width: 1240px; text-align: center; font-family: var(--f-mao); font-size: 42px; line-height: 1.2; color: var(--creme); text-shadow: 0 3px 16px rgba(0,0,0,.45); }
+.cine-legenda span { display: inline-block; }
+.cine-legenda em.pincel { color: var(--ouro-claro); }
+
+/* medidor de coragem */
+.cine-medidor { position: absolute; left: 110px; top: 196px; width: 220px; height: 580px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.med-rot { font-family: var(--f-round); font-size: 34px; letter-spacing: 6px; }
+.med-rot.cor { color: var(--ouro-claro); text-shadow: 0 0 18px rgba(255,210,122,.5); }
+.med-rot.medo { color: #B9A3F0; }
+.cine-medidor .tubo { position: relative; flex: 1; width: 46px; border-radius: 30px; background: rgba(10,21,25,.45); box-shadow: inset 0 0 0 3px rgba(244,236,221,.25); }
+.cine-medidor .enche { position: absolute; left: 6px; right: 6px; bottom: 6px; height: 20%; max-height: calc(100% - 12px); border-radius: 30px; transition: height .5s ease-out;
+  background: linear-gradient(0deg, #8566C9, var(--vermelho-claro) 50%, var(--ouro-claro)); background-size: 100% 480px; background-position: bottom; box-shadow: 0 0 18px rgba(255,210,122,.45); }
+.cine-medidor .marcador { position: absolute; left: 50%; width: 70px; translate: -50% 0; transition: bottom .5s ease-out; filter: drop-shadow(0 4px 10px rgba(0,0,0,.4)); }
+.cine-medidor .marcador svg { width: 100%; height: auto; display: block; }
+.cinema.voando .cine-medidor .marcador, .cinema.acabou .cine-medidor .marcador { animation: batida .8s ease-in-out infinite; }
+@keyframes batida { 50% { scale: 1.18; } }
+
+/* a voz do Bruno: frases de dúvida na margem */
+.cine-duvidas { position: absolute; left: 1548px; top: 196px; width: 340px; display: flex; flex-direction: column; align-items: flex-start; gap: 20px; }
+.duv-rot { font-family: var(--f-round); font-size: 30px; letter-spacing: 6px; color: #CDBBFF; background: rgba(10,21,25,.55); padding: 6px 18px 4px; border-radius: 30px; }
+.cinema .alvo.duvida { font-size: 34px; line-height: 1.15; padding: 16px 24px; border-radius: 28px; background: rgba(44,26,84,.72); border: 3px solid rgba(185,163,240,.45); rotate: var(--inc);
+  opacity: 0; scale: .6; filter: blur(8px); transition: opacity .7s, scale .7s cubic-bezier(.2,1.4,.4,1), filter .7s; }
+.cinema .alvo.duvida.vis { opacity: 1; scale: 1; filter: blur(0); animation: flutua 3.6s ease-in-out infinite; }
+.cinema .alvo.duvida:nth-of-type(odd).vis { animation-delay: -1.8s; }
+.cinema.gritou .alvo.duvida.vis { animation: treme .18s linear infinite; border-color: rgba(239,74,90,.6); }
+@keyframes flutua { 50% { translate: 0 -10px; } }
+@keyframes treme { 25% { translate: -3px 1px; } 75% { translate: 3px -1px; } }
+.duv-dica { font-family: var(--f-mao); font-size: 30px; color: var(--ouro-claro); opacity: 0; translate: 0 10px; transition: opacity .8s .8s, translate .8s .8s; }
+.cinema.acabou .duv-dica { opacity: 1; translate: 0 0; }
+.cine-carimbo { position: absolute; left: 1506px; top: 380px; width: 400px; padding: 18px 10px; text-align: center; font-family: var(--f-pincel); font-size: 64px; line-height: 1; color: var(--vermelho-claro); background: rgba(244,236,221,.94);
+  border: 6px solid var(--vermelho-claro); border-radius: 14px; rotate: -8deg; opacity: 0; pointer-events: none; box-shadow: 0 16px 40px rgba(0,0,0,.4); z-index: 4; }
+.tipo-cinema .luva-soco { z-index: 8; }

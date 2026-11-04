@@ -12,7 +12,7 @@ import { fileURLToPath } from "node:url";
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), "..");
 const ler = (p) => readFileSync(join(raiz, p), "utf8");
-const MIME = { ".woff2": "font/woff2", ".webp": "image/webp", ".png": "image/png", ".jpg": "image/jpeg", ".svg": "image/svg+xml" };
+const MIME = { ".woff2": "font/woff2", ".webp": "image/webp", ".png": "image/png", ".jpg": "image/jpeg", ".svg": "image/svg+xml", ".mp4": "video/mp4" };
 const dataURI = (p) => `data:${MIME[extname(p)]};base64,${readFileSync(join(raiz, p)).toString("base64")}`;
 const embutirImagens = (txt) => txt.replace(/assets\/img\/[\w.-]+\.(webp|png|jpg)/g, (m) => dataURI(m));
 const semFechamento = (js) => js.replace(/<\/script/gi, "<\\/script");
@@ -30,6 +30,11 @@ html = html.replace(/<script src="(js\/[\w.-]+\.js)"><\/script>/g, (m, p) => `<s
 
 // fotos e logo
 html = embutirImagens(html);
+
+// trecho do filme: a capa vai sempre embutida; o vídeo só no arquivo offline
+// (na página do Claude ele é publicado como arquivo separado, em assets/video/)
+html = html.replace(/assets\/video\/[\w.-]+\.jpg/g, (m) => dataURI(m));
+if (!process.argv.includes("--artifact")) html = html.replace(/assets\/video\/[\w.-]+\.mp4/g, (m) => dataURI(m));
 
 const artifact = process.argv.includes("--artifact");
 if (artifact) {

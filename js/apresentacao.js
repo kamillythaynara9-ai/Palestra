@@ -4,7 +4,7 @@
    climas do fundo, abre o cartão de round e cuida das
    interações (socos, cartões que viram, tijolos, confete), sem som.
 
-   Tipos de slide: espera, capa, abertura, historia, citacao, impacto,
+   Tipos de slide: espera, capa, abertura, historia, citacao, impacto, cinema,
    pausa, virada, grade, passos, destaque, intervalo, nocaute, aviso,
    emocoes, emocao, filme, trio, mar, lutador, diploma, foto, viradas,
    tijolos, levante, final, obrigada
@@ -173,6 +173,26 @@
       <div class="luva-soco">${SVG.luva}</div>
       ${s.frases.map((f, k) => `<i data-passo="${k + 1}" data-acao="soco" data-alvo="${k}"></i>`).join("")}`,
 
+    cinema: s => {
+      const caps = s.momentos.map((m, k) => `<button type="button" class="cap${k === 0 ? " primeiro" : ""}${m.lado ? " alinha-" + m.lado : ""}" data-t="${m.t}" style="left:${(m.t / s.duracao * 100).toFixed(2)}%"><i></i><span>${esc(m.nome)}</span></button>`).join("");
+      const duv = s.duvidas.map((d, k) => `<p class="alvo duvida" style="--inc:${k % 2 ? 2.5 : -2}deg">${esc(d[0])}</p>`).join("");
+      return `<div class="cinema" data-id="${s.id}">
+        <span class="cine-luz e" aria-hidden="true"></span><span class="cine-luz d" aria-hidden="true"></span>
+        <div class="cine-topo" data-a="sobe"><p class="filme-rotulo">${SVG.play}${esc(s.rotulo)}</p><h2 class="cine-titulo">${md(s.titulo)}</h2></div>
+        <div class="cine-medidor" data-a="esq"><span class="med-rot cor">Coragem</span><div class="tubo"><div class="enche"></div><span class="marcador">${SVG.coracaoCheio}</span></div><span class="med-rot medo">Medo</span></div>
+        <div class="cine-moldura" data-a="pop"><div class="ambi" aria-hidden="true"></div><div class="lampadas" aria-hidden="true"></div>
+          <div class="cinema-tela"><video preload="auto" playsinline poster="${s.capa}" src="${s.video}"></video>
+            <div class="cine-capa"><span class="botao-play">${SVG.play}</span><p>Clique para começar</p></div>
+            <div class="cine-fim"><p>E você?</p><h3>${md(s.final)}</h3></div>
+            <div class="cine-flash" aria-hidden="true"></div></div></div>
+        <div class="cine-linha" data-a="sobe"><div class="trilho"><div class="feito"></div>${caps}</div></div>
+        <p class="cine-legenda"><span></span></p>
+        <div class="cine-duvidas"><p class="duv-rot">A voz do Bruno</p>${duv}<p class="duv-dica">Vamos mandar o Bruno calar?</p></div>
+        <div class="cine-carimbo" aria-hidden="true">Silêncio, Bruno!</div></div>
+        <div class="luva-soco">${SVG.luva}</div>
+        <i data-passo="1" data-acao="play"></i>${s.duvidas.map((d, k) => `<i data-passo="${k + 2}" data-acao="soco" data-alvo="${k}"></i>`).join("")}`;
+    },
+
     aviso: s => `<div class="centro"><div class="aviso-grande" data-a="pop">
       <span class="icone">${SVG.alerta}</span><p class="rot">${esc(s.rotulo)}</p><p data-a="palavras">${md(s.texto)}</p></div></div>`,
 
@@ -294,6 +314,113 @@
     return el;
   });
 
+  /* ---------------- cinema: o trecho do filme com a margem interativa ---------------- */
+  const Cinema = (() => {
+    const dados = c => S.find(s => s.id === c.dataset.id);
+    const ambiCanvas = document.createElement("canvas"); ambiCanvas.width = 24; ambiCanvas.height = 12;
+    const ambiCtx = ambiCanvas.getContext("2d", { willReadFrequently: true });
+    const media = (d, x0, x1) => { let r = 0, g = 0, b = 0, n = 0; for (let y = 0; y < 12; y++) for (let x = x0; x < x1; x++) { const i = (y * 24 + x) * 4; r += d[i]; g += d[i + 1]; b += d[i + 2]; n++; } return `rgb(${r / n | 0},${g / n | 0},${b / n | 0})`; };
+
+    function lampadas(c) {
+      const box = $(".lampadas", c), W = 1092, H = 614, passo = 42;
+      let html = "", k = 0;
+      const p = (x, y) => { html += `<i style="left:${x}px;top:${y}px;--k:${k++ % 3}"></i>`; };
+      for (let x = 14; x <= W - 14; x += (W - 28) / Math.round((W - 28) / passo)) p(x, 12);
+      for (let y = 12 + passo; y < H - 12; y += (H - 24) / Math.round((H - 24) / passo)) p(W - 14, y);
+      for (let x = W - 14; x >= 14; x -= (W - 28) / Math.round((W - 28) / passo)) p(x, H - 12);
+      for (let y = H - 12 - passo; y > 12; y -= (H - 24) / Math.round((H - 24) / passo)) p(14, y);
+      box.innerHTML = html;
+    }
+
+    function nivel(s, t) {
+      const m = s.medidor; if (t <= m[0][0]) return m[0][1];
+      for (let i = 1; i < m.length; i++) if (t <= m[i][0]) { const [t0, v0] = m[i - 1], [t1, v1] = m[i]; return v0 + (v1 - v0) * (t - t0) / (t1 - t0); }
+      return m[m.length - 1][1];
+    }
+
+    function tick(c) {
+      const v = c._v, s = dados(c), t = v.currentTime || 0, fim = c.classList.contains("acabou");
+      $(".feito", c).style.width = Math.min(100, t / s.duracao * 100) + "%";
+      const nv = nivel(s, t);
+      $(".enche", c).style.height = (nv * 100) + "%";
+      $(".marcador", c).style.bottom = `calc((100% - 64px) * ${nv.toFixed(3)})`;
+      $$(".duvida", c).forEach((d, k) => d.classList.toggle("vis", fim || t >= s.duvidas[k][1]));
+      let mi = 0; s.momentos.forEach((m, k) => { if (t >= m.t) mi = k; });
+      $$(".cap", c).forEach((b, k) => { b.classList.toggle("passou", k <= mi && (t > 0 || k === 0)); b.classList.toggle("agora", k === mi); });
+      if (mi !== c._mom) {
+        c._mom = mi; const sp = $(".cine-legenda span", c);
+        sp.innerHTML = md(s.momentos[mi].txt);
+        if (!calmo) sp.animate([{ opacity: 0, translate: "0 18px", filter: "blur(6px)" }, { opacity: 1, translate: "0 0", filter: "blur(0px)" }], { duration: 700, easing: "cubic-bezier(.2,.8,.2,1)" });
+      }
+      if (t >= s.grito && t < s.grito + 4 && !c._grito && !v.paused) grito(c);
+      if (t < s.grito - .5) { c._grito = false; c.classList.remove("gritou"); }
+      if (t >= s.voo && !c._voo && !v.paused) voo(c);
+      if (t < s.voo - .5) { c._voo = false; c.classList.remove("voando"); }
+    }
+
+    function grito(c) {
+      c._grito = true; c.classList.add("gritou");
+      if (calmo) return;
+      $(".cine-flash", c).animate([{ opacity: 0 }, { opacity: .75, offset: .15 }, { opacity: 0 }], { duration: 700 });
+      $(".cine-carimbo", c).animate([{ opacity: 0, scale: "2.6", rotate: "-14deg" }, { opacity: 1, scale: "1", rotate: "-8deg", offset: .18 }, { opacity: 1, scale: "1", rotate: "-8deg", offset: .82 }, { opacity: 0, scale: "1.05", rotate: "-8deg" }], { duration: 3200, easing: "cubic-bezier(.18,1.2,.4,1)" });
+      palco.classList.remove("tremendo"); void palco.offsetWidth; palco.classList.add("tremendo");
+      const [x, y] = centro($(".cine-duvidas", c)); window.Fundo.explosao(x, y, ["#FFD27A", "#EF4A5A", "#F4ECDD"], 70);
+    }
+
+    function voo(c) {
+      c._voo = true; c.classList.add("voando");
+      if (calmo) return;
+      const [x, y] = centro($(".cine-moldura", c));
+      [[-560, -260], [560, -260], [-560, 260], [560, 260], [0, -330]].forEach(([dx, dy], k) => agendar(() => window.Fundo.explosao(x + dx, y + dy, ["#FFD27A", "#FFF1C8", "#4CC6CF", "#F4ECDD"], 46), k * 260));
+    }
+
+    function ambi(c) {
+      clearInterval(c._ambi);
+      if (calmo) return;
+      const passar = () => {
+        try {
+          ambiCtx.drawImage(c._v, 0, 0, 24, 12);
+          const d = ambiCtx.getImageData(0, 0, 24, 12).data;
+          c.style.setProperty("--ambi-e", media(d, 0, 7)); c.style.setProperty("--ambi-d", media(d, 17, 24)); c.style.setProperty("--ambi-m", media(d, 8, 16));
+        } catch (e) { clearInterval(c._ambi); }
+      };
+      passar(); c._ambi = setInterval(passar, 220);
+    }
+
+    function iniciar(c) {
+      const v = c._v = $("video", c);
+      lampadas(c);
+      if (v.getAttribute("src").startsWith("data:")) fetch(v.getAttribute("src")).then(r => r.blob()).then(b => { v.src = URL.createObjectURL(b); }).catch(() => { });
+      v.addEventListener("timeupdate", () => tick(c));
+      v.addEventListener("seeked", () => tick(c));
+      v.addEventListener("play", () => { c.classList.add("tocando", "comecou"); c.classList.remove("acabou"); ambi(c); });
+      v.addEventListener("pause", () => { c.classList.remove("tocando"); clearInterval(c._ambi); });
+      v.addEventListener("ended", () => {
+        c.classList.add("acabou"); c.classList.remove("tocando", "voando"); clearInterval(c._ambi); tick(c);
+        if (!calmo) { const [x, y] = centro($(".cine-moldura", c)); window.Fundo.explosao(x, y - 60, ["#FFD27A", "#EF4A5A", "#F4ECDD", "#4CC6CF"], 90); }
+      });
+      zerar(c);
+    }
+
+    function zerar(c) {
+      const v = c._v; if (!v) return;
+      v.pause(); try { v.currentTime = 0; } catch (e) { }
+      clearInterval(c._ambi);
+      c.classList.remove("tocando", "comecou", "acabou", "gritou", "voando");
+      c._grito = c._voo = false; c._mom = -1;
+      tick(c);
+    }
+
+    function alternar(c) { const v = c._v; if (!v) return; if (v.paused) { if (v.ended) zerarTempo(c); v.play().catch(() => { }); } else v.pause(); }
+    function zerarTempo(c) { c.classList.remove("acabou"); try { c._v.currentTime = 0; } catch (e) { } }
+    function tocar(c) { const v = c._v; if (v && v.paused && !v.ended) v.play().catch(() => { }); }
+    function irPara(c, t) { const v = c._v; c.classList.remove("acabou"); v.currentTime = t; v.play().catch(() => { }); }
+
+    return { iniciar, zerar, alternar, tocar, irPara };
+  })();
+  slides.forEach(sl => $$(".cinema", sl).forEach(Cinema.iniciar));
+  const pausarVideos = (el) => $$("video", el || document).forEach(v => v.pause());
+
   /* ---------------- sem som: a apresentação é silenciosa ---------------- */
   const Som = { gongo() { }, soco() { }, pop() { } };
 
@@ -414,7 +541,8 @@
       if (!c) return; c.classList.add("virado");
       if (!rapido && !calmo) { Som.pop(); agendar(() => { const [x, y] = centro(c); window.Fundo.explosao(x + 500, y, ["#FFD27A", "#EF4A5A", "#F4ECDD"], 30); }, 450); }
     },
-    confete(sl, marca, rapido) { if (!rapido) { window.Fundo.confete(); Som.gongo(); } }
+    confete(sl, marca, rapido) { if (!rapido) { window.Fundo.confete(); Som.gongo(); } },
+    play(sl, marca, rapido) { if (!rapido) $$(".cinema", sl).forEach(Cinema.tocar); }
   };
 
   function revelarPasso(sl, k, rapido) {
@@ -433,6 +561,7 @@
     $$(".pintado, .riscado-on, .virado, .apagando, .nocauteado", sl).forEach(x => x.classList.remove("pintado", "riscado-on", "virado", "apagando", "nocauteado"));
     $$("[data-passo]", sl).forEach(x => x.classList.add("esperando"));
     $$(".alvo", sl).forEach(a => a.style.opacity = "");
+    $$(".cinema", sl).forEach(Cinema.zerar);
   }
 
   /* ---------------- cartão de round ---------------- */
@@ -465,6 +594,7 @@
     const sAnt = atual >= 0 ? S[atual] : null;
     if (atual >= 0) {
       const velho = slides[atual];
+      pausarVideos(velho);
       velho.classList.remove("ativo"); velho.classList.add("saindo"); velho.setAttribute("aria-hidden", "true");
       const a = velho.animate([{ opacity: 1 }, { opacity: 0, translate: "0 -24px", filter: "blur(4px)" }], { duration: 360, easing: "ease-in", fill: "forwards" });
       a.onfinish = () => { if (!velho.classList.contains("ativo")) { velho.classList.remove("saindo"); zerar(velho); } };
@@ -559,12 +689,18 @@
     else if (k === "n" || k === "N") notas.classList.toggle("aberto");
     else if (k === "g" || k === "G") { grade.classList.add("aberto"); const b = $("#grade .atual"); if (b) b.focus(); }
     else if (k === "f" || k === "F") telaCheia();
-    else if (k === "b" || k === "B" || k === ".") pausa.classList.toggle("ativo");
+    else if (k === "b" || k === "B" || k === ".") { pausa.classList.toggle("ativo"); if (pausa.classList.contains("ativo")) pausarVideos(); }
+    else if (k === "p" || k === "P") $$(".cinema", slides[atual]).forEach(Cinema.alternar);
     else if (k === "h" || k === "H" || k === "?") mostrarDica();
     else if (k === "Escape") { notas.classList.remove("aberto"); pausa.classList.remove("ativo"); }
   });
 
+  function marcarPlay() { if (passo < 1 && $("[data-acao='play']", slides[atual])) { passo = 1; $("[data-acao='play']", slides[atual]).classList.remove("esperando"); atualizarNotas(); } }
   palco.addEventListener("click", e => {
+    const cap = e.target.closest(".cap");
+    if (cap) { Cinema.irPara(cap.closest(".cinema"), Number(cap.dataset.t)); marcarPlay(); return; }
+    const tela = e.target.closest(".cinema-tela");
+    if (tela) { Cinema.alternar(tela.closest(".cinema")); marcarPlay(); return; }
     const pil = e.target.closest(".pilula");
     if (pil) { pil.classList.remove("pulo"); void pil.offsetWidth; pil.classList.add("pulo"); Som.pop(); const [x, y] = centro(pil); window.Fundo.explosao(x, y, [pil.style.backgroundColor, "#F4ECDD"], 24); return; }
     if (pausa.classList.contains("ativo")) { pausa.classList.remove("ativo"); return; }

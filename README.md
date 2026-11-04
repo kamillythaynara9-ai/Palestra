@@ -80,3 +80,13 @@ dist/apresentacao-offline.html  versão de um arquivo só, para usar sem interne
 - Texto: Jennifer Mayara Martins.
 - Logo: Projeto Lutando pelo Futuro.
 - Fontes: Kalam, Caveat Brush, Nunito e Bebas Neue, todas livres pela SIL Open Font License, via Google Fonts e Fontsource.
+
+## Trecho do filme (Luca)
+
+O slide 16 mostra o trecho do Luca (1min21) dentro da apresentação, com a margem interativa: frases do Bruno, medidor de coragem, linha do tempo clicável e luzes que acompanham a cena.
+
+- 1º clique (ou clicar no vídeo): play. Clicar no vídeo ou apertar **P**: pausa e continua.
+- Os nomes embaixo do vídeo pulam para aquela parte.
+- Depois do vídeo, cada clique dá um soco numa frase do Bruno.
+
+O arquivo do vídeo não fica no GitHub (é um trecho do filme). Para rodar a pasta do código, coloque o vídeo em `assets/video/luca.mp4` e a capa em `assets/video/luca-capa.jpg`. O arquivo `apresentacao-offline.html` do pacote já traz o vídeo dentro.
