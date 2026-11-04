@@ -12,7 +12,7 @@ import { fileURLToPath } from "node:url";
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), "..");
 const ler = (p) => readFileSync(join(raiz, p), "utf8");
-const MIME = { ".woff2": "font/woff2", ".webp": "image/webp", ".png": "image/png", ".jpg": "image/jpeg", ".svg": "image/svg+xml", ".mp4": "video/mp4" };
+const MIME = { ".woff2": "font/woff2", ".webp": "image/webp", ".png": "image/png", ".jpg": "image/jpeg", ".svg": "image/svg+xml", ".mp4": "video/mp4", ".mp3": "audio/mpeg" };
 const dataURI = (p) => `data:${MIME[extname(p)]};base64,${readFileSync(join(raiz, p)).toString("base64")}`;
 const embutirImagens = (txt) => txt.replace(/assets\/img\/[\w.-]+\.(webp|png|jpg)/g, (m) => dataURI(m));
 const semFechamento = (js) => js.replace(/<\/script/gi, "<\\/script");
@@ -33,9 +33,14 @@ html = embutirImagens(html);
 
 // trecho do filme: a capa vai sempre embutida
 html = html.replace(/assets\/video\/[\w.-]+\.jpg/g, (m) => dataURI(m));
-// o vídeo vai embutido nas duas versões; na página do Claude ele também é publicado
-// como arquivo separado (videoArquivo), que fica de reserva
-html = html.replace(/(video: ")(assets\/video\/[\w.-]+\.mp4)(")/, (m, a, p, z) => `${a}${dataURI(p)}${z}, videoArquivo: "${p}"`);
+// o vídeo vai embutido. No arquivo offline, como MP4 (toca no <video> do navegador).
+// Na página do Claude o <video> é bloqueado, então vai como H.264 puro + MP3, que a
+// apresentação decodifica sozinha (WebCodecs + Web Audio). Esses dois arquivos são
+// gerados a partir do MP4 com os comandos do README.
+const artifactModo = process.argv.includes("--artifact");
+html = html.replace(/video: "(assets\/video\/([\w-]+)\.mp4)"/, (m, p, nome) => artifactModo
+  ? `h264: "data:video/h264;base64,${readFileSync(join(raiz, `assets/video/${nome}.h264`)).toString("base64")}", audio: "${dataURI(`assets/video/${nome}.mp3`)}", codec: "avc1.4d401e", fps: 30`
+  : `video: "${dataURI(p)}"`);
 
 const artifact = process.argv.includes("--artifact");
 if (artifact) {

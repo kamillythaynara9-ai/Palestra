@@ -89,4 +89,11 @@ O slide 16 mostra o trecho do Luca (1min21) dentro da apresentação, com a marg
 - Os nomes embaixo do vídeo pulam para aquela parte.
 - Depois do vídeo, cada clique dá um soco numa frase do Bruno.
 
+Na página publicada no Claude o navegador não deixa tocar vídeo comum, então lá o trecho vai como H.264 puro + MP3, e a própria apresentação decodifica e desenha o vídeo (WebCodecs + Web Audio). Para gerar esses dois arquivos a partir do MP4:
+
+```
+ffmpeg -i assets/video/luca.mp4 -an -vf fps=30 -c:v libx264 -preset veryfast -crf 25 -bf 0 -g 30 -keyint_min 30 -sc_threshold 0 -pix_fmt yuv420p -profile:v main -level 3.0 -bsf:v h264_metadata=aud=insert -f h264 assets/video/luca.h264
+ffmpeg -i assets/video/luca.mp4 -vn -c:a libmp3lame -b:a 112k assets/video/luca.mp3
+```
+
 O arquivo do vídeo não fica no GitHub (é um trecho do filme). Para rodar a pasta do código, coloque o vídeo em `assets/video/luca.mp4` e a capa em `assets/video/luca-capa.jpg`. O arquivo `apresentacao-offline.html` do pacote já traz o vídeo dentro.

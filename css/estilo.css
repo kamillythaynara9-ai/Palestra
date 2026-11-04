@@ -518,3 +518,4 @@ strong {
 .cine-erro small { font-size: 26px; color: #CFE0DF; max-width: 760px; }
 .cinema.sem-video .cine-erro { display: flex; }
 .cinema.sem-video .cine-capa { display: none; }
+.cinema-tela canvas.cine-canvas { width: 100%; height: 100%; display: block; object-fit: cover; }

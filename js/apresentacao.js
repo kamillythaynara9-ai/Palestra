@@ -181,9 +181,9 @@
         <div class="cine-topo" data-a="sobe"><p class="filme-rotulo">${SVG.play}${esc(s.rotulo)}</p><h2 class="cine-titulo">${md(s.titulo)}</h2></div>
         <div class="cine-medidor" data-a="esq"><span class="med-rot cor">Coragem</span><div class="tubo"><div class="enche"></div><span class="marcador">${SVG.coracaoCheio}</span></div><span class="med-rot medo">Medo</span></div>
         <div class="cine-moldura" data-a="pop"><div class="ambi" aria-hidden="true"></div><div class="lampadas" aria-hidden="true"></div>
-          <div class="cinema-tela"><video preload="auto" playsinline poster="${s.capa}" src="${s.video}"></video>
+          <div class="cinema-tela"><video preload="auto" playsinline poster="${s.capa}"${s.video ? ` src="${s.video}"` : ""}></video><canvas class="cine-canvas" width="640" height="346"></canvas>
             <div class="cine-capa"><span class="botao-play">${SVG.play}</span><p>Clique para começar</p></div>
-            <div class="cine-erro"><p>O vídeo não carregou nesta página.</p><small>Abra o arquivo Apresentacao_offline.html ou toque o Trecho_Luca_1min21.mp4 em outra janela.</small></div>
+            <div class="cine-erro"><p>O vídeo não carregou nesta página.</p><small>Use o Google Chrome atualizado, ou abra o arquivo Apresentacao_offline.html.</small></div>
             <div class="cine-fim"><p>E você?</p><h3>${md(s.final)}</h3></div>
             <div class="cine-flash" aria-hidden="true"></div></div></div>
         <div class="cine-linha" data-a="sobe"><div class="trilho"><div class="feito"></div>${caps}</div></div>
@@ -340,7 +340,8 @@
     }
 
     function tick(c) {
-      const v = c._v, s = dados(c), t = v.currentTime || 0, fim = c.classList.contains("acabou");
+      const v = c._v; if (!v) return;
+      const s = dados(c), t = v.currentTime || 0, fim = c.classList.contains("acabou");
       $(".feito", c).style.width = Math.min(100, t / s.duracao * 100) + "%";
       const nv = nivel(s, t);
       $(".enche", c).style.height = (nv * 100) + "%";
@@ -380,7 +381,7 @@
       if (calmo) return;
       const passar = () => {
         try {
-          ambiCtx.drawImage(c._v, 0, 0, 24, 12);
+          ambiCtx.drawImage(c._tela, 0, 0, 24, 12);
           const d = ambiCtx.getImageData(0, 0, 24, 12).data;
           c.style.setProperty("--ambi-e", media(d, 0, 7)); c.style.setProperty("--ambi-d", media(d, 17, 24)); c.style.setProperty("--ambi-m", media(d, 8, 16));
         } catch (e) { clearInterval(c._ambi); }
@@ -410,10 +411,122 @@
       proxima();
     }
 
+    /* reprodutor próprio (para a página do Claude, que bloqueia <video>):
+       decodifica o H.264 com WebCodecs e desenha num canvas; o som vai pelo Web Audio */
+    function bytesDe(uri) {
+      const bin = atob(uri.slice(uri.indexOf(",") + 1)), u8 = new Uint8Array(bin.length);
+      for (let k = 0; k < bin.length; k++) u8[k] = bin.charCodeAt(k);
+      return u8;
+    }
+    function quadrosH264(u8) {
+      const aus = []; let ini = -1, chave = false;
+      for (let i = 0; i + 3 < u8.length; i++) {
+        if (u8[i] === 0 && u8[i + 1] === 0 && u8[i + 2] === 1) {
+          const tipo = u8[i + 3] & 31, st = (i > 0 && u8[i - 1] === 0) ? i - 1 : i;
+          if (tipo === 9) { if (ini >= 0) aus.push({ data: u8.subarray(ini, st), chave }); ini = st; chave = false; }
+          else if (tipo === 5) chave = true;
+          i += 2;
+        }
+      }
+      if (ini >= 0) aus.push({ data: u8.subarray(ini), chave });
+      return aus;
+    }
+    function criarPlayer(canvas, s) {
+      const ev = new EventTarget(), fps = s.fps || 30, g = canvas.getContext("2d");
+      const aus = quadrosH264(bytesDe(s.h264)), total = aus.length, dur = total / fps;
+      const cfg = { codec: s.codec || "avc1.4d401e", codedWidth: canvas.width, codedHeight: canvas.height, optimizeForLatency: true };
+      let dec = null, fila = [], prox = 0, offset = 0, pausado = true, acabou = false, rel0 = 0, actx = null, buf = null, fonte = null, ultimoTU = 0;
+      const emitir = n => ev.dispatchEvent(new Event(n));
+      const audio = () => {
+        if (!actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return Promise.resolve(); } }
+        if (buf || !s.audio) return Promise.resolve();
+        const u8 = bytesDe(s.audio);
+        return actx.decodeAudioData(u8.buffer.slice(0)).then(b => { buf = b; }).catch(() => { });
+      };
+      const agora = () => actx && buf ? actx.currentTime : performance.now() / 1000;
+      const tempo = () => pausado ? offset : Math.min(dur, offset + agora() - rel0);
+      function novo() {
+        if (dec) { try { dec.close(); } catch (e) { } }
+        fila.forEach(f => f.close()); fila = [];
+        dec = new VideoDecoder({ output: f => fila.push(f), error: () => { } });
+        dec.configure(cfg);
+      }
+      function alimentar(ate) {
+        const lim = ate == null ? total : Math.min(total, ate + 1);
+        while (prox < lim && dec.state === "configured" && dec.decodeQueueSize < 10 && fila.length < 14) {
+          const a = aus[prox];
+          try { dec.decode(new EncodedVideoChunk({ type: a.chave ? "key" : "delta", timestamp: Math.round(prox * 1e6 / fps), data: a.data })); }
+          catch (e) { let k = prox; while (k > 0 && !aus[k].chave) k--; novo(); prox = k; return; }
+          prox++;
+        }
+      }
+      function desenhar(t) {
+        const alvo = t * 1e6 + 1000; let f = null;
+        while (fila.length && fila[0].timestamp <= alvo) { if (f) f.close(); f = fila.shift(); }
+        if (f) { g.drawImage(f, 0, 0, canvas.width, canvas.height); f.close(); }
+      }
+      function buscar(t) {
+        const idx = Math.max(0, Math.min(total - 1, Math.floor(t * fps)));
+        let k = idx; while (k > 0 && !aus[k].chave) k--;
+        novo(); prox = k;
+        if (!pausado) { emitir("seeked"); return; }
+        const meu = dec;
+        // parado: decodifica até o quadro pedido, mostra, e rearma o decodificador no quadro-chave
+        const encher = () => { if (dec !== meu) return; alimentar(idx); if (prox <= idx) setTimeout(encher, 4); else dec.flush().then(() => { if (dec !== meu) return; desenhar(idx / fps); novo(); prox = k; emitir("seeked"); }).catch(() => { }); };
+        encher();
+      }
+      function laco() {
+        if (pausado) return;
+        const t = tempo();
+        try { desenhar(t); alimentar(); } catch (e) { }
+        if (performance.now() - ultimoTU > 240) { ultimoTU = performance.now(); emitir("timeupdate"); }
+        if (t >= dur - 1 / fps) { pausar(); offset = dur; acabou = true; emitir("timeupdate"); emitir("ended"); return; }
+        requestAnimationFrame(laco);
+      }
+      function pausar() {
+        if (pausado) return;
+        offset = tempo(); pausado = true;
+        if (fonte) { try { fonte.stop(); } catch (e) { } fonte = null; }
+        emitir("pause");
+      }
+      function iniciarSom() {
+        if (fonte) { try { fonte.stop(); } catch (e) { } fonte = null; }
+        if (actx && buf) { fonte = actx.createBufferSource(); fonte.buffer = buf; fonte.connect(actx.destination); fonte.start(0, Math.min(offset, buf.duration - .01)); }
+        rel0 = agora();
+      }
+      const pl = {
+        canvas, get duration() { return dur; }, get paused() { return pausado; }, get ended() { return acabou; },
+        get currentTime() { return tempo(); },
+        set currentTime(t) {
+          t = Math.max(0, Math.min(dur, Number(t) || 0)); offset = t; acabou = false;
+          buscar(t);
+          if (!pausado) iniciarSom();
+          emitir("timeupdate");
+        },
+        play() {
+          if (!pausado) return Promise.resolve();
+          if (acabou) { acabou = false; offset = 0; buscar(0); }
+          const pronto = audio().then(() => actx && actx.state === "suspended" ? actx.resume() : null);
+          pausado = false; emitir("play");
+          return pronto.then(() => { if (pausado) return; iniciarSom(); requestAnimationFrame(laco); });
+        },
+        pause: pausar,
+        addEventListener: (n, f) => ev.addEventListener(n, f)
+      };
+      if (s.capa) { const im = new Image(); im.onload = () => { if (offset === 0) g.drawImage(im, 0, 0, canvas.width, canvas.height); }; im.src = s.capa; }
+      novo(); buscar(0);
+      return pl;
+    }
+
     function iniciar(c) {
-      const v = c._v = $("video", c);
+      const s = dados(c), tela = $(".cinema-tela", c), video = $("video", c), cv = $("canvas.cine-canvas", c);
       lampadas(c);
-      fontes(c);
+      if (s.h264) {
+        video.remove();
+        if (!("VideoDecoder" in window)) { c.classList.add("sem-video"); c._v = null; return; }
+        c._v = criarPlayer(cv, s); c._tela = cv;
+      } else { cv.remove(); c._v = video; c._tela = video; fontes(c); }
+      const v = c._v;
       v.addEventListener("timeupdate", () => tick(c));
       v.addEventListener("seeked", () => tick(c));
       v.addEventListener("play", () => { c.classList.add("tocando", "comecou"); c.classList.remove("acabou"); ambi(c); });
@@ -437,12 +550,12 @@
     function alternar(c) { const v = c._v; if (!v) return; if (v.paused) { if (v.ended) zerarTempo(c); v.play().catch(() => { }); } else v.pause(); }
     function zerarTempo(c) { c.classList.remove("acabou"); try { c._v.currentTime = 0; } catch (e) { } }
     function tocar(c) { const v = c._v; if (v && v.paused && !v.ended) v.play().catch(() => { }); }
-    function irPara(c, t) { const v = c._v; c.classList.remove("acabou"); v.currentTime = t; v.play().catch(() => { }); }
+    function irPara(c, t) { const v = c._v; if (!v) return; c.classList.remove("acabou"); v.currentTime = t; v.play().catch(() => { }); }
 
     return { iniciar, zerar, alternar, tocar, irPara };
   })();
   slides.forEach(sl => $$(".cinema", sl).forEach(Cinema.iniciar));
-  const pausarVideos = (el) => $$("video", el || document).forEach(v => v.pause());
+  const pausarVideos = (el) => $$(".cinema", el || document).forEach(c => { if (c._v) c._v.pause(); });
 
   /* ---------------- sem som: a apresentação é silenciosa ---------------- */
   const Som = { gongo() { }, soco() { }, pop() { } };
