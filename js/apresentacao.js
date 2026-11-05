@@ -111,7 +111,7 @@
       <img class="capa-logo" src="${FOT.logo}" alt="${EV.projeto}" data-a="gira">
       <div class="capa-texto">
         <p class="rotulo so-esq" data-a="sobe">Palestra</p>
-        <h1 data-a="letras">${md("Eu poderia ter me tornado *amarga,*")}<br>${md("mas escolhi *amar.*").replace('class="pincel"', 'class="pincel par"')}</h1>
+        <h1 class="tema" data-a="palavras">${md("Existem lutas que são visíveis, que são as do ringue,")}<br>${md("mas existem lutas que *ninguém vê,* e essas são internas.")}<br>${md("E eu conheço *essas lutas.*").replace('class="pincel"', 'class="pincel par"')}</h1>
         <div class="etiqueta" data-a="pincel"><small>Palestrante</small><span>${EV.palestrante}</span></div>
       </div>`,
 

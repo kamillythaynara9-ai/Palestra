@@ -615,3 +615,5 @@ strong {
 .album-esq .pausa { padding-left: 470px; }
 .album-dir .citacao { right: 640px; }
 .album-esq-baixo .centro { padding-left: 420px; }
+.capa-texto h1.tema { font-size: 60px; line-height: 1.22; }
+.capa-texto h1.tema em.pincel { font-size: 1.3em; }

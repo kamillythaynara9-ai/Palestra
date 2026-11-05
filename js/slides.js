@@ -67,12 +67,14 @@ window.SLIDES = [
   /* ---------------- ROUND 1 · A luta que ninguém vê ---------------- */
   /* 2 */
   { id: "r01", tipo: "passos", clima: "noite", round: 1, estilo: "golpe",
-    intro: "Existem lutas que são visíveis, que são as do ringue,",
+    intro: "Existe a luta…",
     itens: [
-      "mas existem lutas que ninguém vê,",
-      "e essas são internas."
+      "contra o medo.",
+      "contra a rejeição.",
+      "contra a sensação de não ser capaz.",
+      "para pedir ajuda e recomeçar."
     ],
-    fecho: "E eu conheço *essas lutas.*",
+    fecho: "E eu conheço muito bem *essa luta.*",
     notas: "A PROPOSTA: a palestra nasce da conexão entre o universo do boxe e as lutas internas que muitas pessoas enfrentam sem que ninguém perceba. A ideia é conversar com crianças, adolescentes e adultos sobre identidade, autoestima, limites, saúde emocional, pedir ajuda, recomeço e esperança. “Existem lutas que acontecem dentro do ringue. E existem lutas que acontecem dentro da gente.” A minha história será usada como fio condutor — não para expor cada detalhe daquilo que vivi, mas para mostrar que experiências difíceis podem fazer parte da nossa história sem precisar definir o nosso futuro. || A LUTA QUE NINGUÉM VÊ: “Quando eu recebi o convite para estar aqui, comecei a pensar no significado da palavra lutar. Aqui, vocês ensinam crianças a lutar. Elas aprendem golpes, defesa, disciplina, resistência e concentração. Mas existe uma luta que não acontece dentro do ringue. Existe a luta contra o medo, contra a rejeição, contra a baixa autoestima, contra a sensação de não ser capaz. Existe a luta para colocar limites, pedir ajuda e recomeçar. E algumas dessas lutas podem ser muito mais difíceis do que qualquer luta que aconteça dentro de um ringue. E eu conheço muito bem essa luta.” Cada clique é um golpe; o último mostra a frase de fechamento." },
 
   /* ---------------- ROUND 2 · A menina ---------------- */
