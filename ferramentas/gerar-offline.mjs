@@ -38,8 +38,9 @@ html = html.replace(/assets\/video\/[\w.-]+\.jpg/g, (m) => dataURI(m));
 // apresentação decodifica sozinha (WebCodecs + Web Audio). Esses dois arquivos são
 // gerados a partir do MP4 com os comandos do README.
 const artifactModo = process.argv.includes("--artifact");
-html = html.replace(/video: "(assets\/video\/([\w-]+)\.mp4)"/, (m, p, nome) => artifactModo
-  ? `h264: "data:video/h264;base64,${readFileSync(join(raiz, `assets/video/${nome}.h264`)).toString("base64")}", audio: "${dataURI(`assets/video/${nome}.mp3`)}", codec: "avc1.4d401e", fps: 30`
+const CODEC = { luca: ["avc1.4d401e", 30], divertida: ["avc1.4d401f", 24] };
+html = html.replace(/video: "(assets\/video\/([\w-]+)\.mp4)"/g, (m, p, nome) => artifactModo
+  ? `h264: "data:video/h264;base64,${readFileSync(join(raiz, `assets/video/${nome}.h264`)).toString("base64")}", audio: "${dataURI(`assets/video/${nome}.mp3`)}", codec: "${CODEC[nome][0]}", fps: ${CODEC[nome][1]}`
   : `video: "${dataURI(p)}"`);
 
 const artifact = process.argv.includes("--artifact");

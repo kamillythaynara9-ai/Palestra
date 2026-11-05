@@ -97,3 +97,11 @@ ffmpeg -i assets/video/luca.mp4 -vn -c:a libmp3lame -b:a 112k assets/video/luca.
 ```
 
 O vídeo fica em `assets/video/luca.mp4` (com a capa em `assets/video/luca-capa.jpg`) e é publicado junto com o site. O arquivo `apresentacao-offline.html` também traz o vídeo dentro.
+
+## Trecho do filme (Divertida-Mente)
+
+O slide 18 mostra o trecho da Divertida-Mente (55 s, vídeo em pé) com a ideia "uma memória, dois olhares": à esquerda o que a Alegria vê, à direita o que a Tristeza vê. Cada memória acende quando aparece no vídeo, e a luz do fundo pende para o dourado ou para o azul conforme quem fala. Depois do vídeo, cada clique junta as duas metades de uma memória numa esfera dourada e azul; na última aparece "Em alguns momentos, alegria e tristeza andarão juntas."
+
+- 1º clique (ou clicar no vídeo): play. Clicar no vídeo ou apertar **P**: pausa e continua.
+- Clicar numa memória pula para aquela parte do vídeo.
+- Arquivos: `assets/video/divertida.mp4` e `assets/video/divertida-capa.jpg`. Para a página do Claude, gere também `divertida.h264` (24 quadros por segundo, nível 3.1) e `divertida.mp3`, como no Luca.

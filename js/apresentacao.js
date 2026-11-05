@@ -4,7 +4,7 @@
    climas do fundo, abre o cartão de round e cuida das
    interações (socos, cartões que viram, tijolos, confete), sem som.
 
-   Tipos de slide: espera, capa, abertura, historia, citacao, impacto, cinema,
+   Tipos de slide: espera, capa, abertura, historia, citacao, impacto, cinema, memorias,
    pausa, virada, grade, passos, destaque, intervalo, nocaute, aviso,
    emocoes, emocao, filme, trio, mar, lutador, diploma, foto, viradas,
    tijolos, levante, final, obrigada
@@ -195,6 +195,25 @@
         <i data-passo="1" data-acao="play"></i>${s.duvidas.map((d, k) => `<i data-passo="${k + 2}" data-acao="soco" data-alvo="${k}"></i>`).join("")}`;
     },
 
+    memorias: s => {
+      const h = 820, w = Math.round(s.largura / s.altura * h);
+      const lado = q => s.memorias.map((m, k) => `<button type="button" class="mem-card ${q}" data-k="${k}" data-t="${m.t}"><span class="orbe" aria-hidden="true"></span><span class="mem-txt"><b>${esc(m.nome)}</b><span class="fala">${md(m[q][0])}</span></span></button>`).join("");
+      return `<div class="cinema memorias" data-id="${s.id}" data-cena="mem">
+        <div class="mem-ceu" aria-hidden="true"><i class="lado-a"></i><i class="lado-t"></i><i class="vinheta"></i></div>
+        <div class="mem-topo" data-a="sobe"><p class="filme-rotulo">${SVG.play}${esc(s.rotulo)}</p><h2 class="mem-titulo">${md(s.titulo)}</h2></div>
+        <div class="mem-col a" data-a="sobe"><p class="mem-quem">Alegria vê</p>${lado("alegria")}</div>
+        <div class="mem-col t" data-a="sobe"><p class="mem-quem">Tristeza vê</p>${lado("tristeza")}</div>
+        <div class="mem-moldura" data-a="pop" style="width:${w + 16}px;height:${h + 16}px;left:${Math.round(960 - (w + 16) / 2)}px">
+          <span class="mem-aro" aria-hidden="true"></span>
+          <div class="cinema-tela mem-tela" style="width:${w}px;height:${h}px"><video preload="auto" playsinline poster="${s.capa}"${s.video ? ` src="${s.video}"` : ""}></video><canvas class="cine-canvas" width="${s.largura}" height="${s.altura}"></canvas>
+            <div class="cine-capa"><span class="botao-play">${SVG.play}</span><p>Clique para começar</p></div>
+            <div class="cine-erro"><p>O vídeo não carregou nesta página.</p><small>Use o Google Chrome atualizado, ou abra o arquivo Apresentacao_offline.html.</small></div>
+            <div class="mem-fim"><p class="pergunta">E se as duas tiverem razão?</p>
+              <div class="mem-estante">${s.memorias.map((m, k) => `<span class="junta" data-k="${k}"><i></i><small>${esc(m.nome)}</small></span>`).join("")}</div>
+              <h3>${md(s.final)}</h3></div></div></div></div>
+        <i data-passo="1" data-acao="play"></i>${s.memorias.map((m, k) => `<i data-passo="${k + 2}" data-acao="juntar" data-alvo="${k}"></i>`).join("")}`;
+    },
+
     aviso: s => `<div class="centro"><div class="aviso-grande" data-a="pop">
       <span class="icone">${SVG.alerta}</span><p class="rot">${esc(s.rotulo)}</p><p data-a="palavras">${md(s.texto)}</p></div></div>`,
 
@@ -334,13 +353,47 @@
       box.innerHTML = html;
     }
 
-    function nivel(s, t) {
-      const m = s.medidor; if (t <= m[0][0]) return m[0][1];
-      for (let i = 1; i < m.length; i++) if (t <= m[i][0]) { const [t0, v0] = m[i - 1], [t1, v1] = m[i]; return v0 + (v1 - v0) * (t - t0) / (t1 - t0); }
-      return m[m.length - 1][1];
+    function nivel(s, t) { return interp(s.medidor, t); }
+
+    const interp = (m, t) => { if (t <= m[0][0]) return m[0][1]; for (let i = 1; i < m.length; i++) if (t <= m[i][0]) { const [t0, v0] = m[i - 1], [t1, v1] = m[i]; return v0 + (v1 - v0) * (t - t0) / (t1 - t0); } return m[m.length - 1][1]; };
+
+    /* Divertida-Mente: cada memória acende dos dois lados, e a luz pende para quem fala */
+    function tickMem(c) {
+      const v = c._v; if (!v) return;
+      const s = dados(c), t = v.currentTime || 0, fim = c.classList.contains("acabou"), comecou = c.classList.contains("comecou");
+      c._acesas = c._acesas || {};
+      s.memorias.forEach((m, k) => {
+        ["alegria", "tristeza"].forEach(q => {
+          const card = $(`.mem-card.${q}[data-k="${k}"]`, c), on = fim || (comecou && t >= m[q][1]), id = q + k;
+          card.classList.toggle("acesa", on);
+          if (on && !c._acesas[id] && !v.paused && !calmo) { const [x, y] = centro($(".orbe", card)); window.Fundo.explosao(x, y, q === "alegria" ? ["#FFD27A", "#F6C445", "#FFF1C8"] : ["#7FB2F0", "#3D7CC9", "#DCEBFF"], 22); }
+          c._acesas[id] = on;
+        });
+      });
+      let mi = -1; if (comecou && !fim) s.memorias.forEach((m, k) => { if (t >= m.t) mi = k; });
+      $$(".mem-card", c).forEach(b => b.classList.toggle("agora", Number(b.dataset.k) === mi));
+      const bal = fim || !comecou ? 0 : interp(s.balanco, t);
+      $(".mem-ceu .lado-a", c).style.opacity = (.3 + .55 * Math.max(0, bal)).toFixed(2);
+      $(".mem-ceu .lado-t", c).style.opacity = (.3 + .55 * Math.max(0, -bal)).toFixed(2);
+    }
+
+    function juntar(c, k, rapido) {
+      const a = $(`.mem-card.alegria[data-k="${k}"]`, c), tr = $(`.mem-card.tristeza[data-k="${k}"]`, c), slot = $(`.junta[data-k="${k}"]`, c);
+      const fimJunta = () => { slot.classList.add("on"); a.classList.add("juntou"); tr.classList.add("juntou"); if ($$(".junta.on", c).length === $$(".junta", c).length) c.classList.add("tudo-junto"); };
+      if (rapido || calmo) { fimJunta(); return; }
+      const [sx, sy] = centro($("i", slot));
+      [[a, "#FFD27A"], [tr, "#7FB2F0"]].forEach(([card]) => {
+        const o = $(".orbe", card), [ox, oy] = centro(o);
+        o.animate([{ translate: "0 0", scale: "1", opacity: 1 }, { translate: `${(sx - ox) * .55}px ${(sy - oy) * .55 - 90}px`, scale: "1.15", opacity: 1, offset: .55 }, { translate: `${sx - ox}px ${sy - oy}px`, scale: ".7", opacity: 0 }], { duration: 1100, easing: "cubic-bezier(.45,0,.3,1)" });
+      });
+      agendar(() => {
+        fimJunta(); window.Fundo.explosao(sx, sy, ["#FFD27A", "#F6C445", "#7FB2F0", "#3D7CC9", "#F4ECDD"], c.classList.contains("tudo-junto") ? 120 : 50);
+        if (c.classList.contains("tudo-junto")) agendar(() => window.Fundo.confete(), 300);
+      }, 1050);
     }
 
     function tick(c) {
+      if (c.dataset.cena === "mem") return tickMem(c);
       const v = c._v; if (!v) return;
       const s = dados(c), t = v.currentTime || 0, fim = c.classList.contains("acabou");
       $(".feito", c).style.width = Math.min(100, t / s.duracao * 100) + "%";
@@ -523,7 +576,7 @@
 
     function iniciar(c) {
       const s = dados(c), tela = $(".cinema-tela", c), video = $("video", c), cv = $("canvas.cine-canvas", c);
-      lampadas(c);
+      if (c.dataset.cena !== "mem") lampadas(c);
       if (s.h264) {
         video.remove();
         if (!("VideoDecoder" in window)) { c.classList.add("sem-video"); c._v = null; return; }
@@ -536,7 +589,7 @@
       v.addEventListener("pause", () => { c.classList.remove("tocando"); clearInterval(c._ambi); });
       v.addEventListener("ended", () => {
         c.classList.add("acabou"); c.classList.remove("tocando", "voando"); clearInterval(c._ambi); tick(c);
-        if (!calmo) { const [x, y] = centro($(".cine-moldura", c)); window.Fundo.explosao(x, y - 60, ["#FFD27A", "#EF4A5A", "#F4ECDD", "#4CC6CF"], 90); }
+        if (!calmo) { const [x, y] = centro($(".cine-moldura, .mem-moldura", c)); window.Fundo.explosao(x, y - 60, ["#FFD27A", "#EF4A5A", "#F4ECDD", "#4CC6CF"], 90); }
       });
       zerar(c);
     }
@@ -546,7 +599,8 @@
       v.pause(); try { v.currentTime = 0; } catch (e) { }
       clearInterval(c._ambi);
       c.classList.remove("tocando", "comecou", "acabou", "gritou", "voando");
-      c._grito = c._voo = false; c._mom = -1;
+      c._grito = c._voo = false; c._mom = -1; c._acesas = {};
+      c.classList.remove("tudo-junto"); $$(".juntou, .junta.on", c).forEach(x => x.classList.remove("juntou", "on"));
       tick(c);
     }
 
@@ -555,7 +609,7 @@
     function tocar(c) { const v = c._v; if (v && v.paused && !v.ended) v.play().catch(() => { }); }
     function irPara(c, t) { const v = c._v; if (!v) return; c.classList.remove("acabou"); v.currentTime = t; v.play().catch(() => { }); }
 
-    return { iniciar, zerar, alternar, tocar, irPara };
+    return { iniciar, zerar, alternar, tocar, irPara, juntar };
   })();
   slides.forEach(sl => $$(".cinema", sl).forEach(Cinema.iniciar));
   const pausarVideos = (el) => $$(".cinema", el || document).forEach(c => { if (c._v) c._v.pause(); });
@@ -681,7 +735,8 @@
       if (!rapido && !calmo) { Som.pop(); agendar(() => { const [x, y] = centro(c); window.Fundo.explosao(x + 500, y, ["#FFD27A", "#EF4A5A", "#F4ECDD"], 30); }, 450); }
     },
     confete(sl, marca, rapido) { if (!rapido) { window.Fundo.confete(); Som.gongo(); } },
-    play(sl, marca, rapido) { if (!rapido) $$(".cinema", sl).forEach(Cinema.tocar); }
+    play(sl, marca, rapido) { if (!rapido) $$(".cinema", sl).forEach(Cinema.tocar); },
+    juntar(sl, marca, rapido) { const c = $(".cinema", sl); if (c) Cinema.juntar(c, Number(marca.dataset.alvo), rapido); }
   };
 
   function revelarPasso(sl, k, rapido) {
@@ -836,6 +891,8 @@
 
   function marcarPlay() { if (passo < 1 && $("[data-acao='play']", slides[atual])) { passo = 1; $("[data-acao='play']", slides[atual]).classList.remove("esperando"); atualizarNotas(); } }
   palco.addEventListener("click", e => {
+    const mc = e.target.closest(".mem-card");
+    if (mc) { Cinema.irPara(mc.closest(".cinema"), Number(mc.dataset.t)); marcarPlay(); return; }
     const cap = e.target.closest(".cap");
     if (cap) { Cinema.irPara(cap.closest(".cinema"), Number(cap.dataset.t)); marcarPlay(); return; }
     const tela = e.target.closest(".cinema-tela");

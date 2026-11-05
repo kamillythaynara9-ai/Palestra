@@ -235,11 +235,21 @@ window.SLIDES = [
     escolhidas: ["Ansiedade", "Tristeza", "Vergonha"],
     notas: "No primeiro filme: Alegria, Tristeza, Raiva, Medo e Nojinho. No segundo, aparecem novas emoções, incluindo Ansiedade, Inveja, Vergonha e Tédio; a Nostalgia aparece brevemente. Vamos falar de três (as que pulsam; clicar numa emoção faz ela pular). ANSIEDADE, quando a mente corre para o futuro: medo de errar, preocupação com o que os outros vão pensar, pressão para ser perfeito. Pergunte: “Quantas vezes você sofreu por algo que ainda nem aconteceu?” TRISTEZA, quando precisamos de acolhimento: chorar não é fraqueza; às vezes a tristeza mostra que precisamos de cuidado, escuta e apoio. Na sua história: você precisou aprender que não precisava esconder tudo o que sentia. VERGONHA, quando temos medo de sermos julgados: crianças que escondem seus sentimentos, têm vergonha de pedir ajuda ou tentam mudar quem são para serem aceitas." },
   /* 18 */
-  { id: "dm5", tipo: "filme", clima: "sol", round: "INT",
-    rotulo: "Trecho do filme · Divertida-Mente 2",
-    texto: "A vida não é perfeita.",
-    frase: "Em alguns momentos, *alegria* e *tristeza* andarão juntas.",
-    notas: "1. Mostre o trecho do filme. Deixe o público assistir e refletir por alguns segundos. “Às vezes, você vai realizar seus sonhos em momentos difíceis da sua vida. A vida não é perfeita. Em alguns momentos, alegria e tristeza andarão juntas.” 2. Reflexão: “Quem aqui já sorriu por fora, mas estava triste por dentro? Quem já teve um sonho, mas, por causa das dificuldades, pensou em desistir?” 3. Conecte com a sua história: “Eu aprendi que ser forte não significa estar feliz o tempo todo. Eu também chorei, tive medo e precisei de ajuda. Mas entendi que a tristeza não precisava ser o fim da minha história. Eu podia sentir dor e, mesmo assim, continuar construindo um futuro melhor.”" },
+  { id: "divertida", tipo: "memorias", clima: "mente", round: "INT",
+    rotulo: "Trecho do filme · Divertida-Mente (Pixar, 2015)",
+    titulo: "Uma memória, *dois olhares*",
+    video: "assets/video/divertida.mp4",
+    capa: "assets/video/divertida-capa.jpg",
+    largura: 480, altura: 852, duracao: 55,
+    memorias: [
+      { nome: "Uma coisa divertida", t: 0, alegria: ["Pensa numa coisa bem divertida.", 0.3], tristeza: ["O filme em que o pai do leãozinho morre.", 3] },
+      { nome: "Leite pelo nariz", t: 8, alegria: ["A Riley riu tão forte que saiu leite pelo nariz!", 9.5], tristeza: ["Mas ardeu… parecia fogo queimando.", 16] },
+      { nome: "Um passeio", t: 21, alegria: ["Tem o sol e a praia! O papai enterrado na areia.", 29], tristeza: ["Eu tava pensando em chuva…", 34] },
+      { nome: "A chuva", t: 37, alegria: ["Poças, guarda-chuvas coloridos e relâmpagos!", 40], tristeza: ["Pé ensopado, frio, tremedeira… tudo fica sombrio.", 46] }
+    ],
+    balanco: [[0, .6], [2.6, .6], [3, -.6], [6, -.6], [6.4, .5], [15.6, .6], [16, -.6], [19.3, -.6], [19.6, .5], [23.6, .5], [24, -.5], [27.6, -.5], [28, .6], [33.6, .6], [34, -.6], [37.3, -.6], [37.6, .7], [45.6, .7], [46, -.8], [55, -.8]],
+    final: "Em alguns momentos, *alegria* e *tristeza* andarão juntas.",
+    notas: "COMO USAR ESTE SLIDE: o trecho da Divertida-Mente (55 segundos) já está dentro do slide. O 1º clique (ou clicar no vídeo) dá o play; clicar no vídeo ou a tecla P pausa e continua. Clicar numa memória (dos lados) pula para aquela parte. Enquanto o vídeo passa, cada memória acende dos dois lados: à esquerda, como a Alegria vê; à direita, como a Tristeza vê. A luz do fundo puxa para o dourado quando a Alegria fala e para o azul quando a Tristeza fala. Depois do vídeo, a cada clique uma memória junta os dois lados numa esfera só, dourada e azul; na última aparece a frase “Em alguns momentos, alegria e tristeza andarão juntas.” || 1. Mostre o trecho do filme. Deixe o público assistir e refletir por alguns segundos. “Às vezes, você vai realizar seus sonhos em momentos difíceis da sua vida. A vida não é perfeita. Em alguns momentos, alegria e tristeza andarão juntas.” 2. Reflexão: “Quem aqui já sorriu por fora, mas estava triste por dentro? Quem já teve um sonho, mas, por causa das dificuldades, pensou em desistir?” 3. Conecte com a sua história: “Eu aprendi que ser forte não significa estar feliz o tempo todo. Eu também chorei, tive medo e precisei de ajuda. Mas entendi que a tristeza não precisava ser o fim da minha história. Eu podia sentir dor e, mesmo assim, continuar construindo um futuro melhor.”" },
   /* 19 */
   { id: "bx2", tipo: "trio", clima: "ringue", round: "INT",
     intro: "Ninguém precisa esconder o que sente para provar que é forte.",
