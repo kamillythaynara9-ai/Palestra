@@ -14,7 +14,7 @@ const raiz = join(dirname(fileURLToPath(import.meta.url)), "..");
 const ler = (p) => readFileSync(join(raiz, p), "utf8");
 const MIME = { ".woff2": "font/woff2", ".webp": "image/webp", ".png": "image/png", ".jpg": "image/jpeg", ".svg": "image/svg+xml", ".mp4": "video/mp4", ".mp3": "audio/mpeg" };
 const dataURI = (p) => `data:${MIME[extname(p)]};base64,${readFileSync(join(raiz, p)).toString("base64")}`;
-const embutirImagens = (txt) => txt.replace(/assets\/img\/[\w.-]+\.(webp|png|jpg)/g, (m) => dataURI(m));
+const embutirImagens = (txt) => txt.replace(/assets\/img\/[\w.\/-]+\.(webp|png|jpg)/g, (m) => dataURI(m));
 const semFechamento = (js) => js.replace(/<\/script/gi, "<\\/script");
 
 let html = ler("index.html");

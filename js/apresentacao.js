@@ -72,6 +72,20 @@
   const rotRound = r => r === "INT" ? "INTERVALO" : "ROUND " + pad(r);
 
   /* ---------------- peças comuns ---------------- */
+  /* fotos da Jennifer em polaroides; clicar abre a foto grande */
+  const ALBUM_POS = {
+    col: { box: [120, 575, 500, 420], fotos: { 1: [[150, 0, 200, -4]], 2: [[30, 10, 200, -6], [250, 30, 200, 5]], 3: [[0, 30, 180, -8], [160, 0, 180, 4], [315, 40, 180, -3]] } },
+    dir: { box: [1350, 250, 480, 560], fotos: { 1: [[30, 40, 400, 4]] } },
+    esq: { box: [90, 250, 420, 600], fotos: { 1: [[40, 30, 330, -5]] } },
+    "esq-baixo": { box: [100, 470, 420, 520], fotos: { 1: [[40, 10, 290, -6]] } }
+  };
+  function album(s) {
+    if (!s.fotos) return "";
+    const P = ALBUM_POS[s.album || "col"], pos = P.fotos[s.fotos.length] || P.fotos[1];
+    return `<div class="album" style="left:${P.box[0]}px;top:${P.box[1]}px;width:${P.box[2]}px;height:${P.box[3]}px">${s.fotos.map((f, k) => { const [x, y, w, g] = pos[k] || pos[0];
+      return `<figure class="foto-p${f.paisagem ? " paisagem" : ""}" data-a="polaroid" style="left:${x}px;top:${y}px;width:${w}px;rotate:${g}deg" data-leg="${esc(f.legenda)}"><img src="${f.src}" alt="${esc(f.alt || f.legenda)}"><figcaption>${esc(f.legenda)}</figcaption></figure>`; }).join("")}</div>`;
+  }
+
   const FIO = `<svg class="fio" style="top:880px" viewBox="0 0 2000 120" data-a="desenha" aria-hidden="true"><path class="traco" d="M0 60 C 300 10 500 110 800 60 S 1300 10 1600 60 S 1900 100 2000 50" stroke="#C8202F" stroke-width="16" fill="none" stroke-linecap="round"/><path d="M0 60 C 300 10 500 110 800 60 S 1300 10 1600 60 S 1900 100 2000 50" stroke="rgba(255,190,190,.5)" stroke-width="5" stroke-dasharray="8 14" fill="none"/></svg>`;
   function colEsq(s) {
     const r = s.round, titulo = s.titulo || RD[r];
@@ -259,7 +273,7 @@
       <p class="texto-medio" style="font-family:var(--f-mao);font-size:60px;line-height:1.3;color:var(--tx);max-width:1450px" data-a="leitura">${md(s.texto)}</p>
       <div class="carimbo" data-a="carimbo" data-fx="explosao">${esc(s.frase)}</div></div>`,
 
-    foto: s => `<div class="polaroid" data-a="foto"><span class="fita"></span><img src="${FOT.retrato}" alt="Jennifer Mayara Martins sorrindo"><span class="legenda">eu, hoje</span></div>
+    foto: s => `<div class="polaroid" data-a="foto"><span class="fita"></span><img src="${s.foto || FOT.retrato}" alt="Jennifer Mayara Martins, hoje"><span class="legenda">eu, hoje</span></div>
       <div class="col-dir" style="left:880px;width:900px;gap:46px">
         <p style="font-size:50px" data-a="palavras">${md(s.texto)}</p>
         <h2 class="frase-grande" style="font-size:90px" data-a="letras">${md(s.frase)}</h2>${SVG.coracaoTraco}</div>`,
@@ -321,10 +335,10 @@
   const slides = S.map((s, i) => {
     const el = document.createElement("section");
     const tema = window.Fundo.tema(s.clima);
-    el.className = `slide ${tema} tipo-${s.tipo} clima-${s.clima}` + (s.tipo === "emocao" ? " " + s.nome.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase() : "");
+    el.className = `slide ${tema} tipo-${s.tipo} clima-${s.clima}` + (s.fotos ? ` album-${s.album || "col"}` : "") + (s.tipo === "emocao" ? " " + s.nome.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase() : "");
     el.setAttribute("aria-hidden", "true");
     el.setAttribute("aria-label", `Slide ${i + 1}`);
-    el.innerHTML = (M[s.tipo] || M.historia)(s) + (s.fio ? FIO : "");
+    el.innerHTML = (M[s.tipo] || M.historia)(s) + (s.fio ? FIO : "") + album(s);
     $$("[data-a]", el).forEach(x => {
       const a = x.dataset.a;
       if (a === "letras" || a === "impacto") dividir(x, true);
@@ -671,6 +685,7 @@
     balanco(el, d) { an(el, [{ opacity: 0, translate: "0 -300px" }, { opacity: 1, translate: "0 0" }], { duration: 1300, delay: d, easing: MOLA }); return 0; },
     cai(el, d) { an(el, [{ opacity: 0, translate: "0 -720px", rotate: "-9deg" }, { opacity: 1, translate: "0 0", rotate: "0deg", offset: .72 }, { translate: "0 -22px", offset: .86 }, { opacity: 1, translate: "0 0" }], { duration: 780, delay: d, easing: "ease-in" }); return 560; },
     carimbo(el, d) { an(el, [{ opacity: 0, scale: "3.2" }, { opacity: 1, scale: ".92", offset: .72 }, { opacity: 1, scale: "1" }], { duration: 520, delay: d, easing: "cubic-bezier(.5,0,.4,1)" }); return 420; },
+    polaroid(el, d) { an(el, [{ opacity: 0, translate: "0 -90px", scale: ".85" }, { opacity: 1, translate: "0 0", scale: "1" }], { duration: 1000, delay: d, easing: MOLA }); return 260; },
     foto(el, d) { an(el, [{ opacity: 0, translate: "0 -280px", rotate: "16deg" }, { opacity: 1, translate: "0 0", rotate: "-4deg" }], { duration: 1200, delay: d, easing: MOLA }); return 380; },
     "foto-capa"(el, d) { an(el, [{ opacity: 0, scale: ".9", filter: "blur(14px)" }, { opacity: 1, scale: "1", filter: "blur(0px)" }], { duration: 1500, delay: d }); return 350; },
     curativo(el, d) {
@@ -785,6 +800,7 @@
     if (n === atual) return;
     limparTimers();
     cortina.classList.remove("ativo");
+    lupa.classList.remove("aberta");
     const sAnt = atual >= 0 ? S[atual] : null;
     if (atual >= 0) {
       const velho = slides[atual];
@@ -868,6 +884,7 @@
 
   /* ---------------- controles ---------------- */
   const dica = $("#dica"), pausa = $("#pausa");
+  const lupa = document.createElement("figure"); lupa.id = "lupa"; lupa.innerHTML = `<img alt=""><figcaption></figcaption>`; palco.appendChild(lupa);
   let timerDica = setTimeout(() => dica.classList.add("some"), 8000);
   function mostrarDica() { dica.classList.remove("some"); clearTimeout(timerDica); timerDica = setTimeout(() => dica.classList.add("some"), 6000); }
   function telaCheia() { try { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen().catch(() => { }); } catch (e) { } }
@@ -876,6 +893,7 @@
     if (e.altKey || e.ctrlKey || e.metaKey) return;
     const k = e.key;
     if (grade.classList.contains("aberto")) { if (k === "Escape" || k === "g" || k === "G") grade.classList.remove("aberto"); return; }
+    if (lupa.classList.contains("aberta") && !["n", "N", "f", "F"].includes(k)) { e.preventDefault(); lupa.classList.remove("aberta"); return; }
     if (["ArrowRight", "PageDown", " ", "Enter", "ArrowDown"].includes(k)) { e.preventDefault(); if (pausa.classList.contains("ativo")) pausa.classList.remove("ativo"); else avancar(); }
     else if (["ArrowLeft", "PageUp", "Backspace", "ArrowUp"].includes(k)) { e.preventDefault(); voltar(); }
     else if (k === "Home") ir(0, "frente");
@@ -886,11 +904,14 @@
     else if (k === "b" || k === "B" || k === ".") { pausa.classList.toggle("ativo"); if (pausa.classList.contains("ativo")) pausarVideos(); }
     else if (k === "p" || k === "P") $$(".cinema", slides[atual]).forEach(Cinema.alternar);
     else if (k === "h" || k === "H" || k === "?") mostrarDica();
-    else if (k === "Escape") { notas.classList.remove("aberto"); pausa.classList.remove("ativo"); }
+    else if (k === "Escape") { notas.classList.remove("aberto"); pausa.classList.remove("ativo"); lupa.classList.remove("aberta"); }
   });
 
   function marcarPlay() { if (passo < 1 && $("[data-acao='play']", slides[atual])) { passo = 1; $("[data-acao='play']", slides[atual]).classList.remove("esperando"); atualizarNotas(); } }
   palco.addEventListener("click", e => {
+    if (lupa.classList.contains("aberta")) { lupa.classList.remove("aberta"); return; }
+    const fp = e.target.closest(".foto-p");
+    if (fp) { $("img", lupa).src = $("img", fp).src; $("figcaption", lupa).textContent = fp.dataset.leg; lupa.classList.add("aberta"); return; }
     const mc = e.target.closest(".mem-card");
     if (mc) { Cinema.irPara(mc.closest(".cinema"), Number(mc.dataset.t)); marcarPlay(); return; }
     const cap = e.target.closest(".cap");
