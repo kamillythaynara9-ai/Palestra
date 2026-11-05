@@ -1,11 +1,11 @@
 /* =====================================================================
    CONTEÚDO DA PALESTRA
    "Eu poderia ter me tornado amarga, mas escolhi amar"
-   Jennifer Mayara Martins · Projeto Lutando pelo Futuro
+   Jeniffer Mayara Martins · Projeto Lutando pelo Futuro
 
    30 slides. Na tela ficam só título, tópicos e as frases de impacto.
    O texto completo do roteiro está nas NOTAS de cada slide (tecla N),
-   para a Jennifer contar a história com as próprias palavras.
+   para a Jeniffer contar a história com as próprias palavras.
 
    Para mudar um texto, edite aqui. Para mudar a ordem, mova o bloco
    inteiro { ... } de lugar. Nada mais precisa ser alterado.
@@ -25,7 +25,7 @@
 
 window.EVENTO = {
   titulo: "Eu poderia ter me tornado amarga, mas escolhi amar",
-  palestrante: "Jennifer Mayara Martins",
+  palestrante: "Jeniffer Mayara Martins",
   projeto: "Projeto Lutando pelo Futuro"
 };
 
@@ -36,7 +36,7 @@ window.FOTOS = {
 
 window.ROUNDS = {
   1: "A luta que ninguém vê",
-  2: "A menina que cresceu sem saber que era amada",
+  2: "A menina que aprendeu a ser forte desde criança",
   3: "O amor que eu procurei fora de casa",
   4: "Para as mulheres",
   5: "Dois recomeços",
@@ -67,21 +67,18 @@ window.SLIDES = [
   /* ---------------- ROUND 1 · A luta que ninguém vê ---------------- */
   /* 2 */
   { id: "r01", tipo: "passos", clima: "noite", round: 1, estilo: "golpe",
-    intro: "Existe a luta…",
+    intro: "Existem lutas que são visíveis, que são as do ringue,",
     itens: [
-      "contra o medo.",
-      "contra a rejeição.",
-      "contra a sensação de não ser capaz.",
-      "para pedir ajuda e recomeçar."
+      "mas existem lutas que ninguém vê,",
+      "e essas são internas."
     ],
-    fecho: "E eu conheço muito bem *essa luta.*",
+    fecho: "E eu conheço *essas lutas.*",
     notas: "A PROPOSTA: a palestra nasce da conexão entre o universo do boxe e as lutas internas que muitas pessoas enfrentam sem que ninguém perceba. A ideia é conversar com crianças, adolescentes e adultos sobre identidade, autoestima, limites, saúde emocional, pedir ajuda, recomeço e esperança. “Existem lutas que acontecem dentro do ringue. E existem lutas que acontecem dentro da gente.” A minha história será usada como fio condutor — não para expor cada detalhe daquilo que vivi, mas para mostrar que experiências difíceis podem fazer parte da nossa história sem precisar definir o nosso futuro. || A LUTA QUE NINGUÉM VÊ: “Quando eu recebi o convite para estar aqui, comecei a pensar no significado da palavra lutar. Aqui, vocês ensinam crianças a lutar. Elas aprendem golpes, defesa, disciplina, resistência e concentração. Mas existe uma luta que não acontece dentro do ringue. Existe a luta contra o medo, contra a rejeição, contra a baixa autoestima, contra a sensação de não ser capaz. Existe a luta para colocar limites, pedir ajuda e recomeçar. E algumas dessas lutas podem ser muito mais difíceis do que qualquer luta que aconteça dentro de um ringue. E eu conheço muito bem essa luta.” Cada clique é um golpe; o último mostra a frase de fechamento." },
 
   /* ---------------- ROUND 2 · A menina ---------------- */
   /* 3 */
   { id: "r02", tipo: "topicos", clima: "chuva", round: 2,
     itens: [
-      { tag: "Antes de nascer", t: "Uma gravidez não aceita", s: "minha mãe escondeu de todos" },
       { tag: "Minha bisavó", t: "Meu porto seguro", s: "entrava na frente para me defender" },
       { tag: "8 anos", t: "Fui abusada", s: "e tive medo de falar" },
       { tag: "10 anos", t: "Ela teve um AVC, e eu cuidei dela", s: "eu só estava retribuindo o amor que ela me deu" }
@@ -89,7 +86,7 @@ window.SLIDES = [
     notas: "Momento delicado: o slide é sóbrio de propósito. Minha história começou antes mesmo de eu nascer. Minha mãe não aceitou a gravidez e escondeu de todos. Quem me acolheu foi minha avó e, principalmente, minha bisavó, que se tornou meu porto seguro. Cresci sem ouvir um “eu te amo”, sem muito carinho e atenção, carregando um sentimento de rejeição que eu nem sabia explicar. Aos 8 anos, fui abusada por uma pessoa. Por não entender que aquilo era abuso, a situação se repetiu mais tarde com outra pessoa e por muitos anos. Eu tinha medo de falar e não sabia se alguém acreditaria em mim. Minha bisavó era quem me protegia. Muitas vezes entrou na frente para me defender das agressões da minha mãe. Por volta dos 10 anos, ela sofreu um AVC e ficou acamada. Enquanto outras crianças brincavam, eu cuidava dela. Trocava fraldas, dava banho, colocava a comadre e acordava durante a madrugada. Eu sentia que estava apenas retribuindo o amor que ela havia me dado." },
   /* 4 */
   { id: "r02s", tipo: "pausa", clima: "chuva", round: 2,
-    fotos: [{ src: "assets/img/fotos/bisa.webp", legenda: "minha bisa e eu", alt: "Jennifer abraçada com a bisavó" }], album: "esq",
+    fotos: [{ src: "assets/img/fotos/bisa.webp", legenda: "minha bisa e eu", alt: "Jeniffer abraçada com a bisavó" }], album: "esq",
     antes: "Aos 12 anos, ela faleceu.",
     frase: "E eu perdi meu porto seguro.",
     notas: "Pausa. As letras aparecem devagar. FOTO: a montagem com a bisavó foi feita depois que ela conseguiu curar o luto mal resolvido e voltar a olhar as fotos da bisa." },
@@ -99,7 +96,6 @@ window.SLIDES = [
   { id: "r03", tipo: "topicos", clima: "chuva", round: 3,
     itens: [
       { tag: "16 anos", t: "Conheci o pai dos meus filhos", s: "“Agora alguém vai me amar e cuidar de mim.”" },
-      { t: "Abandono e 15 dias no hospital", s: "com meu filho internado, sozinha" },
       { t: "Agressões físicas e verbais", s: "e uma dependência emocional que eu não sabia reconhecer" }
     ],
     frase: "Quando você cresce sem amor, às vezes aprende a aceitar *migalhas* achando que são *banquetes*.",
@@ -131,7 +127,7 @@ window.SLIDES = [
   /* ---------------- ROUND 6 · Endometriose e a cirurgia ---------------- */
   /* 8 */
   { id: "r06", tipo: "topicos", clima: "amanhecer", round: 6,
-    fotos: [{ src: "assets/img/fotos/antes.webp", legenda: "antes", alt: "Jennifer com os filhos, antes da doença" }, { src: "assets/img/fotos/cabelo.webp", legenda: "o cabelo", alt: "Cabelo que caiu durante o tratamento" }, { src: "assets/img/fotos/peso.webp", legenda: "14 kg a menos", alt: "Jennifer mais magra, no espelho" }],
+    fotos: [{ src: "assets/img/fotos/antes.webp", legenda: "nós três", alt: "Jeniffer com os dois filhos, antes da doença" }],
     subtitulo: "Quando o corpo também pede socorro",
     itens: [
       { tag: "Fevereiro de 2023", t: "10 dias internada", s: "diagnóstico: endometriose profunda" },
@@ -139,23 +135,11 @@ window.SLIDES = [
       { tag: "Sinais", t: "Cólica incapacitante · dor pélvica", s: "sangramento intenso · dificuldade para engravidar" }
     ],
     aviso: "**Importante:** sintomas intensos ou persistentes não devem ser normalizados. Procure avaliação de profissionais de saúde.",
-    notas: "Em fevereiro de 2023, fiquei internada por dez dias e descobri uma endometriose profunda. Vieram dores, hemorragias e internações frequentes. A endometriose é uma doença inflamatória crônica na qual um tecido semelhante ao endométrio cresce fora do útero. Pode afetar diferentes regiões da pelve e causar dor e outros sintomas. A apresentação varia muito de uma mulher para outra. Alguns sinais e sintomas que merecem avaliação médica incluem: cólicas menstruais intensas e incapacitantes; dor pélvica persistente; dor durante ou depois da relação sexual; dor para evacuar ou urinar, especialmente durante a menstruação; sangramento menstrual intenso ou irregular; sintomas intestinais ou urinários relacionados ao ciclo; dificuldade para engravidar; cansaço e impacto emocional associados à doença. Importante: sintomas intensos ou persistentes não devem ser normalizados. A investigação e o tratamento precisam ser individualizados por profissionais de saúde. Esta parte tem caráter educativo e não substitui avaliação médica. FOTOS: antes de ficar doente e descobrir a endometriose; durante o tratamento, muita perda de cabelo (todas as vezes que lavava caía muito); mês após mês perdendo peso, no total foram 14 kg." },
-  /* 9 */
-  { id: "r06q", tipo: "citacao", clima: "amanhecer", round: 6, menor: true,
-    fotos: [{ src: "assets/img/fotos/cirurgia1.webp", legenda: "a primeira cirurgia", paisagem: true, alt: "Jennifer no hospital com o filho, na primeira cirurgia" }], album: "dir",
-    citacao: "Serão nove meses. Você não está gerando um bebê, mas uma *nova mulher*. Você entrará naquela sala carregando dores, medos e traumas, mas sairá dali com uma *nova Jennifer*.",
-    autor: "Leila, minha psicóloga",
-    notas: "A CIRURGIA QUE VIROU RECOMEÇO: Os médicos disseram que, se o tratamento não funcionasse, seria necessária uma cirurgia. Eu tinha medo e chorava nas consultas. Durante a terapia, minha psicóloga, Leila, me ajudou a olhar para aquele processo de outra maneira. Ela disse: “Do dia da descoberta até a cirurgia serão nove meses. Você não está gerando um bebê, mas uma nova mulher. Essa cirurgia será como uma cesárea. Você entrará naquela sala carregando dores, medos e traumas, mas sairá dali com uma nova Jennifer.” FOTO: a primeira cirurgia da endometriose." },
-  /* 10 */
-  { id: "r06v", tipo: "virada", clima: "papel", round: 6,
-    frase: "Não era um fim. *Era um recomeço.*",
-    depois: "Novembro de 2023: a mulher que entrou naquela sala não foi a mesma que saiu.",
-    notas: "Naquele dia, eu chorei como uma criança. Porque, pela primeira vez, entendi que aquela cirurgia não era um fim. Era um recomeço. Em novembro de 2023, fiz a cirurgia e retirei o útero e as duas trompas. “Aquela mulher que entrou naquela sala cheia de medo e traumas não foi a mesma que saiu.” Primeiro slide claro da palestra." },
-
+    notas: "Em fevereiro de 2023, fiquei internada por dez dias e descobri uma endometriose profunda. Vieram dores, hemorragias e internações frequentes. A endometriose é uma doença inflamatória crônica na qual um tecido semelhante ao endométrio cresce fora do útero. Pode afetar diferentes regiões da pelve e causar dor e outros sintomas. A apresentação varia muito de uma mulher para outra. Alguns sinais e sintomas que merecem avaliação médica incluem: cólicas menstruais intensas e incapacitantes; dor pélvica persistente; dor durante ou depois da relação sexual; dor para evacuar ou urinar, especialmente durante a menstruação; sangramento menstrual intenso ou irregular; sintomas intestinais ou urinários relacionados ao ciclo; dificuldade para engravidar; cansaço e impacto emocional associados à doença. Importante: sintomas intensos ou persistentes não devem ser normalizados. A investigação e o tratamento precisam ser individualizados por profissionais de saúde. Esta parte tem caráter educativo e não substitui avaliação médica. FOTO: nós três, antes de ficar doente e descobrir a endometriose. (Também viveu, durante o tratamento, muita perda de cabelo e perdeu 14 kg.)" },
   /* ---------------- ROUND 7 · Terapia e a segunda cirurgia ---------------- */
-  /* 11 */
+  /* 9 */
   { id: "r07", tipo: "topicos", clima: "papel", round: 7, curativos: true,
-    fotos: [{ src: "assets/img/fotos/terapia.webp", legenda: "terapia", alt: "Jennifer sorrindo numa chamada de vídeo de terapia" }, { src: "assets/img/fotos/cirurgia2.webp", legenda: "2ª cirurgia", alt: "Jennifer no hospital antes da segunda cirurgia" }, { src: "assets/img/fotos/seroma-pb.webp", legenda: "com 9 dias", alt: "Barriga com o curativo, em preto e branco" }],
+    fotos: [{ src: "assets/img/fotos/terapia.webp", legenda: "terapia", alt: "Jeniffer sorrindo numa chamada de vídeo de terapia" }, { src: "assets/img/fotos/cirurgia2.webp", legenda: "2ª cirurgia", alt: "Jeniffer no hospital antes da segunda cirurgia" }, { src: "assets/img/fotos/seroma-pb.webp", legenda: "com 9 dias", alt: "Barriga com o curativo, em preto e branco" }],
     subtitulo: "Tirando os band-aids",
     itens: [
       { tag: "Junho de 2023", t: "Comecei a terapia, sem querer", s: "eu estava muito mal e não sabia" },
@@ -164,6 +148,18 @@ window.SLIDES = [
     ],
     frase: "A cura não era apagar a história. Era *não permitir que ela continuasse comandando a minha vida.*",
     notas: "TERAPIA: Comecei a terapia em junho de 2023, por orientação da minha nutricionista. Fui sem querer. Achava que psicólogo era para quem estava muito mal. A verdade é que eu estava muito mal e não sabia. Eu dizia que gostava de ficar em casa e de ficar sozinha. Entrava em casa na sexta-feira e só saía na segunda. Achava que aquele era meu jeito, mas comecei a perceber que estava me isolando do mundo. A terapia começou a revelar feridas que estavam escondidas atrás de band-aids. Comecei a “limpar o quarto” do meu interior. Mexer em caixinhas fechadas doeu, mas foi necessário para que as feridas começassem a cicatrizar. Descobri um luto mal resolvido pela perda da minha bisavó. Descobri uma dependência emocional que me fazia aceitar migalhas por medo de ser abandonada. Descobri que me diminuía para caber na vida das pessoas. “Eu estava aprendendo que a cura não era apagar a história. Era não permitir que ela continuasse comandando a minha vida.” || A SEGUNDA CIRURGIA: Depois de aproximadamente um ano e meio, descobri uma hérnia umbilical e precisei enfrentar uma segunda cirurgia. Durante a recuperação, tive complicações: meu organismo rejeitou a tela utilizada na correção da hérnia, desenvolvi um seroma e precisei fazer um tratamento delicado. Fisicamente, foi doloroso. Mas dessa vez eu já não era a mesma mulher. Eu já estava em terapia, aprendendo a olhar para mim, respeitar meus limites e cuidar das minhas emoções. “Se antes eu teria enfrentado tudo sozinha, agora eu estava aprendendo a viver um processo de cura por completo.” Os band-aids descolam e caem sozinhos. FOTOS: começou o processo de terapia; “quando eu achei que já estava tudo bem, olha eu de novo passando pela segunda cirurgia. Mal eu sabia que o pior estava por vir.”; com 9 dias precisei voltar ao hospital, porque o organismo rejeitou a tela e tive seroma (aumento de líquido interno). Essa foto está em preto e branco." },
+
+  /* 10 */
+  { id: "r06q", tipo: "citacao", clima: "amanhecer", round: 7, menor: true,
+    fotos: [{ src: "assets/img/fotos/cirurgia1.webp", legenda: "a primeira cirurgia", paisagem: true, alt: "Jeniffer no hospital com o filho, na primeira cirurgia" }], album: "dir",
+    citacao: "Serão nove meses. Você não está gerando um bebê, mas uma *nova mulher*. Você entrará naquela sala carregando dores, medos e traumas, mas sairá dali com uma *nova Jeniffer*.",
+    autor: "Leila, minha psicóloga",
+    notas: "A CIRURGIA QUE VIROU RECOMEÇO: Os médicos disseram que, se o tratamento não funcionasse, seria necessária uma cirurgia. Eu tinha medo e chorava nas consultas. Durante a terapia, minha psicóloga, Leila, me ajudou a olhar para aquele processo de outra maneira. Ela disse: “Do dia da descoberta até a cirurgia serão nove meses. Você não está gerando um bebê, mas uma nova mulher. Essa cirurgia será como uma cesárea. Você entrará naquela sala carregando dores, medos e traumas, mas sairá dali com uma nova Jeniffer.” FOTO: a primeira cirurgia da endometriose." },
+  /* 11 */
+  { id: "r06v", tipo: "virada", clima: "papel", round: 7,
+    frase: "Não era um fim. *Era um recomeço.*",
+    depois: "Novembro de 2023: a mulher que entrou naquela sala não foi a mesma que saiu.",
+    notas: "Naquele dia, eu chorei como uma criança. Porque, pela primeira vez, entendi que aquela cirurgia não era um fim. Era um recomeço. Em novembro de 2023, fiz a cirurgia e retirei o útero e as duas trompas. “Aquela mulher que entrou naquela sala cheia de medo e traumas não foi a mesma que saiu.” Primeiro slide claro da palestra." },
 
   /* ---------------- ROUND 8 · Uma nova identidade ---------------- */
   /* 12 */
@@ -263,7 +259,7 @@ window.SLIDES = [
   /* ---------------- ROUND 12 · A luta para acreditar em mim ---------------- */
   /* 20 */
   { id: "r12", tipo: "diploma", clima: "ouro", round: 12,
-    fotos: [{ src: "assets/img/fotos/senai.webp", legenda: "SENAI", alt: "Jennifer de camiseta do SENAI" }], album: "esq-baixo",
+    fotos: [{ src: "assets/img/fotos/senai.webp", legenda: "SENAI", alt: "Jeniffer de camiseta do SENAI" }], album: "esq-baixo",
     texto: "SENAI: sete meses, todos os sábados. Hoje, Inspetora de Qualidade. Para mim, uma prova:",
     frase: "EU SOU CAPAZ.",
     notas: "Por muitos anos, eu não acreditava em mim. Não achava que era capaz. Até que entrei na empresa em que trabalho hoje e Deus colocou pessoas no meu caminho que acreditaram em mim antes mesmo de eu conseguir acreditar completamente em mim mesma. Isso me motivou a fazer um curso no SENAI. Durante sete meses, todos os sábados eu saía cedo de casa e voltava quase à noite. Muitas vezes pensei em desistir. Mas sábado após sábado, eu não estava apenas fazendo um curso. Eu estava vencendo uma parte de mim que dizia: “Você não consegue.” “Hoje sou formada em Inspetora de Qualidade. Para muita gente pode ser apenas um diploma. Para mim, foi uma prova: EU SOU CAPAZ.” O carimbo entra com um soco. FOTO: depois de ter passado por tudo, comecei o curso no SENAI e hoje sou formada Inspetora de Qualidade." },

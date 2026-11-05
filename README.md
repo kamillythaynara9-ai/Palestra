@@ -1,6 +1,6 @@
 # Eu poderia ter me tornado amarga, mas escolhi amar
 
-Apresentação animada da palestra de **Jennifer Mayara Martins** no **Projeto Lutando pelo Futuro**, projeto que ensina boxe de graça na comunidade. A palestra é para as famílias dos alunos.
+Apresentação animada da palestra de **Jeniffer Mayara Martins** no **Projeto Lutando pelo Futuro**, projeto que ensina boxe de graça na comunidade. A palestra é para as famílias dos alunos.
 
 A apresentação é uma página web: abre em qualquer navegador, tem fundos animados, letras que aparecem com efeito, cartão de round e momentos interativos. É silenciosa: não tem nenhum som. Não precisa de PowerPoint nem de internet na hora da palestra.
 
@@ -24,7 +24,7 @@ Passadores de slide (clickers) funcionam, porque enviam PageDown e PageUp.
 
 ## Como a apresentação foi pensada
 
-- **Pouco texto na tela:** cada slide tem título, tópicos curtos (com subtópicos e etiquetas de data, idade ou lugar) e uma frase de impacto. O texto completo do roteiro está nas notas de cada slide (tecla N), para a Jennifer contar a história com as próprias palavras.
+- **Pouco texto na tela:** cada slide tem título, tópicos curtos (com subtópicos e etiquetas de data, idade ou lugar) e uma frase de impacto. O texto completo do roteiro está nas notas de cada slide (tecla N), para a Jeniffer contar a história com as próprias palavras.
 
 - **Identidade visual do projeto:** o turquesa do selo, o vermelho da corda, o creme da letra feita à mão, pinceladas e letra manuscrita.
 - **O ambiente do boxe:** cordas do ringue no fundo, refletor, poste do corner, cartão de "ROUND" em cada parte da história, luvas, soco nas frases do "Bruno" e impacto nas frases fortes.
@@ -69,7 +69,7 @@ css/estilo.css             identidade visual, tipos de slide e animações de CS
 js/slides.js               todo o texto da palestra (edite aqui)
 js/fundo.js                fundos animados (ringue, chuva, mar, pôr do sol...)
 js/apresentacao.js         motor: monta os slides, anima as letras, interações e teclas
-assets/img/                logo do projeto e foto da Jennifer (tratada, sem alterar o conteúdo)
+assets/img/                logo do projeto e foto da Jeniffer (tratada, sem alterar o conteúdo)
 assets/fontes/             Kalam, Caveat Brush, Nunito e Bebas Neue
 ferramentas/gerar-offline.mjs   gera dist/apresentacao-offline.html
 dist/apresentacao-offline.html  versão de um arquivo só, para usar sem internet
@@ -77,7 +77,7 @@ dist/apresentacao-offline.html  versão de um arquivo só, para usar sem interne
 
 ## Créditos
 
-- Texto: Jennifer Mayara Martins.
+- Texto: Jeniffer Mayara Martins.
 - Logo: Projeto Lutando pelo Futuro.
 - Fontes: Kalam, Caveat Brush, Nunito e Bebas Neue, todas livres pela SIL Open Font License, via Google Fonts e Fontsource.
 

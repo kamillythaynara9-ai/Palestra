@@ -599,7 +599,7 @@ strong {
 .mem-fim h3 em.pincel:first-of-type { color: var(--ouro-mem); }
 .mem-fim h3 em.pincel + em.pincel, .mem-fim h3 em.pincel.par { color: var(--azul-mem); }
 
-/* ---------- fotos da Jennifer (polaroides) ---------- */
+/* ---------- fotos da Jeniffer (polaroides) ---------- */
 .album { position: absolute; pointer-events: none; }
 .foto-p { position: absolute; margin: 0; padding: 12px 12px 54px; background: var(--papel); box-shadow: 0 18px 44px rgba(0,0,0,.42); cursor: zoom-in; pointer-events: auto; transition: scale .35s var(--mola), box-shadow .35s; }
 .foto-p:hover { scale: 1.06; box-shadow: 0 26px 60px rgba(0,0,0,.5); z-index: 2; }

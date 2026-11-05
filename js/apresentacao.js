@@ -72,7 +72,7 @@
   const rotRound = r => r === "INT" ? "INTERVALO" : "ROUND " + pad(r);
 
   /* ---------------- peças comuns ---------------- */
-  /* fotos da Jennifer em polaroides; clicar abre a foto grande */
+  /* fotos da Jeniffer em polaroides; clicar abre a foto grande */
   const ALBUM_POS = {
     col: { box: [120, 575, 500, 420], fotos: { 1: [[150, 0, 200, -4]], 2: [[30, 10, 200, -6], [250, 30, 200, 5]], 3: [[0, 30, 180, -8], [160, 0, 180, 4], [315, 40, 180, -3]] } },
     dir: { box: [1350, 250, 480, 560], fotos: { 1: [[30, 40, 400, 4]] } },
@@ -106,7 +106,7 @@
       <h1 data-a="letras">${md("Sejam *bem-vindos!*")}</h1>
       <p class="aguarde" data-a="sobe">A palestra já vai começar<i></i><i></i><i></i></p></div>`,
 
-    capa: s => `<div class="capa-foto" data-a="foto-capa"><div class="mancha" style="background: var(--pincel-mancha) no-repeat center / 100% 100%"></div><span class="aro"></span><img src="${FOT.retrato}" alt="Jennifer Mayara Martins sorrindo"></div>
+    capa: s => `<div class="capa-foto" data-a="foto-capa"><div class="mancha" style="background: var(--pincel-mancha) no-repeat center / 100% 100%"></div><span class="aro"></span><img src="${FOT.retrato}" alt="Jeniffer Mayara Martins sorrindo"></div>
       <div class="luvas" style="left:600px; top:-40px" data-a="balanco">${SVG.luvasPenduradas}</div>
       <img class="capa-logo" src="${FOT.logo}" alt="${EV.projeto}" data-a="gira">
       <div class="capa-texto">
@@ -273,7 +273,7 @@
       <p class="texto-medio" style="font-family:var(--f-mao);font-size:60px;line-height:1.3;color:var(--tx);max-width:1450px" data-a="leitura">${md(s.texto)}</p>
       <div class="carimbo" data-a="carimbo" data-fx="explosao">${esc(s.frase)}</div></div>`,
 
-    foto: s => `<div class="polaroid" data-a="foto"><span class="fita"></span><img src="${s.foto || FOT.retrato}" alt="Jennifer Mayara Martins, hoje"><span class="legenda">eu, hoje</span></div>
+    foto: s => `<div class="polaroid" data-a="foto"><span class="fita"></span><img src="${s.foto || FOT.retrato}" alt="Jeniffer Mayara Martins, hoje"><span class="legenda">eu, hoje</span></div>
       <div class="col-dir" style="left:880px;width:900px;gap:46px">
         <p style="font-size:50px" data-a="palavras">${md(s.texto)}</p>
         <h2 class="frase-grande" style="font-size:90px" data-a="letras">${md(s.frase)}</h2>${SVG.coracaoTraco}</div>`,
